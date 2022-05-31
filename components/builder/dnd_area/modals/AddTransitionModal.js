@@ -42,7 +42,16 @@ const AddTransitionModal = ( {elements} ) => {
             </Typography>
             <div>
                 <TextField id='transitionName' label='Transition name' value={transitionName} onChange={(e) => setTransitionName(e.target.value)}/>
+                
                 <TextField select id='fromNode' label='From' value={nodeFrom} helperText='Select transition origin' onChange={(e) => setNodeFrom(e.target.value)}>
+                    {allNodes.map((options) => (
+                        <MenuItem key={options.id} value={options.id}>
+                            {options.label}
+                        </MenuItem>
+                    ))}
+                </TextField>
+
+                <TextField select id='toNode' label='To' value={nodeTo} helperText='Select transition target' onChange={(e) => setNodeTo(e.target.value)}>
                     {allNodes.map((options) => (
                         <MenuItem key={options.id} value={options.id}>
                             {options.label}

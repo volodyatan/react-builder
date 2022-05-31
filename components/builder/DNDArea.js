@@ -18,6 +18,14 @@ const DNDArea = () => {
     console.log(' new nodes ', newNode)
   }
 
+  const addNode = (newNode) => {
+    console.log('new node ', newNode)
+  }
+
+  const addTransition = (newTransition) => {
+    console.log('new transition ', newTransition)
+  }
+
   return (
     <div>
       <Grid  container spacing={2}>
