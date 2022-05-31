@@ -1,0 +1,13 @@
+.grid {
+    overflow: hidden;
+    /* border-radius: 25px; */
+}
+
+.sidepanel {
+    overflow: hidden;
+    /* visibility: hidden; */
+}
+
+.gridItem {
+    overflow: hidden;
+}
