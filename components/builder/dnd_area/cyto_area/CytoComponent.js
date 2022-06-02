@@ -35,6 +35,8 @@ const CytoComponent = (  ) => {
         let position = e.renderedPosition
         if (target.length > 0){
             if(target.isNode()){
+                // TODO: working on context menu: https://github.com/iVis-at-Bilkent/cytoscape.js-context-menus
+                // change to this one tho... https://github.com/cytoscape/cytoscape.js-cxtmenu
                 let options = {
                     evtType: 'cxttap',
                     menuItems: [
