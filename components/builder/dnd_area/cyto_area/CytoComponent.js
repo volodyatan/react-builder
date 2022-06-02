@@ -1,12 +1,14 @@
 import CytoscapeComponent from 'react-cytoscapejs';
 import styles from '../../../../styles/CytoComponent.module.css'
+import useElements from '../../../HOOKS/useElements';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useElementsContext, useElementsAddContext } from '../../../CONTEXT/ElementsProvider';
 
-const CytoComponent = ( {elements} ) => {
+const CytoComponent = (  ) => {
     const [cy, setCy] = useState()
     const [cyStyle, setCyStyle] = useState({ width: '600px', height: '600px' })
-
+    const elements = useElementsContext()
     
     useEffect(() => {
         console.log('CY  ', cy)
@@ -21,7 +23,7 @@ const CytoComponent = ( {elements} ) => {
         <div>
             <CytoscapeComponent className={styles.cyto} elements={elements} style={cyStyle} cy={(cy) => { 
                     cy.centre()
-                    setCy(cy) 
+                    setCy(cy)
                 }} />
         </div>
     )
