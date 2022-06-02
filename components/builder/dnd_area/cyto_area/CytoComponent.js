@@ -1,8 +1,7 @@
 import CytoscapeComponent from 'react-cytoscapejs';
 import styles from '../../../../styles/CytoComponent.module.css'
-import useElements from '../../../HOOKS/useElements';
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useElementsContext, useElementsAddContext } from '../../../CONTEXT/ElementsProvider';
 
 const CytoComponent = (  ) => {
