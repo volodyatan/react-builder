@@ -1,6 +1,8 @@
 import { Button, Box, Typography, TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react'
 
+import { useElementsAddNodeContext } from '../../../CONTEXT/ElementsProvider';
+
 const boxStyle = {
     borderRadius: '25px',
     position: 'absolute',
@@ -16,18 +18,29 @@ const boxStyle = {
     textAlign: 'center'
   }
 
-const AddNodeModal = () => {
+const AddNodeModal = ( {close} ) => {
     const [nodeName, setNodeName] = useState('')
 
+    const addNode = useElementsAddNodeContext()
+
+  const submitForm = () => {
+    addNode(nodeName)
+    close()
+  }
+
   return (
-    <Box sx={boxStyle}
-        component='form'
-        autoComplete='off'>
-            <Typography>
-            Enter node info
-            </Typography>
-            <TextField id='newNodeName' label='Node name' value={nodeName} onChange={(e) => setNodeName(e.target.value)}/>
-            
+    <Box sx={boxStyle} 
+      component='form' 
+      autoComplete='off'
+      onSubmit={(e) => {
+        e.preventDefault()
+        submitForm()}
+        }>
+        <Typography>
+        Enter node info
+        </Typography>
+        <TextField id='newNodeName' label='Node name' value={nodeName} onChange={(e) => setNodeName(e.target.value)}/>
+        <Button type='submit'>Add Node</Button>
 
     </Box>
   )

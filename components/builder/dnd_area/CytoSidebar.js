@@ -4,17 +4,17 @@ import { useState } from 'react';
 import AddNodeModal from './modals/AddNodeModal';
 import AddTransitionModal from './modals/AddTransitionModal';
 
-const DraggableNodes = ( {elements} ) => {
+const DraggableNodes = ( ) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState(<></>)
 
   const handleOpenAddNode = () => {
-    setModalContent(<AddNodeModal />)
+    setModalContent(<AddNodeModal close={handleModalClose}/>)
     setModalOpen(true)
   }
 
   const handleOpenAddTransition = () => {
-    setModalContent(<AddTransitionModal elements={elements}/>)
+    setModalContent(<AddTransitionModal close={handleModalClose}/>)
     setModalOpen(true)
   }
 
