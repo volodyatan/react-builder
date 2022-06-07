@@ -12,6 +12,7 @@ const CytoArea = ( ) => {
 
   return (
     <div>
+      {/* TODO: dynamically change this box size to match window */}
       <Box
         sx={{
           width: 'fill',
