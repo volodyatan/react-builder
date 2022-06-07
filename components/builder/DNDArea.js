@@ -13,23 +13,22 @@ const DNDArea = () => {
   return (
     <div>
       <ElementsProvider>
-        <Grid  container spacing={2}>
+        {/* <Grid  container spacing={2}>
           <Grid className={styles.grid} item xs={8}>
-            {/* {isBrowser() && */}
               <CytoArea />
-            {/* } */}
           </Grid>
-          {/* TODO: make this pop in and out
-          https://mui.com/material-ui/react-speed-dial/
-          https://mui.com/material-ui/react-drawer/ (persistent drawer)*/}
+          
           <Grid className={styles.sidepanel} item xs={4}>
             <CytoSidebar />
           </Grid>
-        </Grid>
+        </Grid> */}
+        <CytoArea />
       </ElementsProvider>
       
     </div>
   )
 }
-
+{/* TODO: make this pop in and out
+          https://mui.com/material-ui/react-speed-dial/
+          https://mui.com/material-ui/react-drawer/ (persistent drawer)*/}
 export default DNDArea

@@ -14,7 +14,7 @@ const boxStyle = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    '& .MuiTextField-root': { m: 1, width: '25ch' },
+    '& .MuiTextField-root': { m: 2, width: '25ch' },
     textAlign: 'center'
   }
 
@@ -34,13 +34,14 @@ const AddNodeModal = ( {close} ) => {
       autoComplete='off'
       onSubmit={(e) => {
         e.preventDefault()
-        submitForm()}
-        }>
+        addNode(nodeName)
+        close()
+      }}>
         <Typography>
         Enter node info
         </Typography>
-        <TextField id='newNodeName' label='Node name' value={nodeName} onChange={(e) => setNodeName(e.target.value)}/>
-        <Button type='submit'>Add Node</Button>
+          <TextField id='newNodeName' label='Node name' value={nodeName} required={true} onChange={(e) => setNodeName(e.target.value)}/>
+          <Button type='submit'>Add Node</Button>
 
     </Box>
   )

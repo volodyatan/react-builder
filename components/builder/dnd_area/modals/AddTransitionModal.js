@@ -1,6 +1,8 @@
 import { Button, MenuItem, Box, Typography, TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react'
 
+import { useElementsAddTransitionContext, useElementsContext } from '../../../CONTEXT/ElementsProvider';
+
 const boxStyle = {
     borderRadius: '25px',
     position: 'absolute',
@@ -16,34 +18,54 @@ const boxStyle = {
     textAlign: 'center'
   }
 
-const AddTransitionModal = ( {elements} ) => {
+const AddTransitionModal = ( {close, source = false} ) => {
     const [transitionName, setTransitionName] = useState('')
     const [nodeFrom, setNodeFrom] = useState('')
     const [nodeTo, setNodeTo] = useState('')
+    const [sourceDisabled, setSourceDisabled] = useState(false)
 
     const [allNodes, setAllNodes] = useState([])
 
+    const elements = useElementsContext()
+    const addTransition = useElementsAddTransitionContext()
+
     useEffect(() => {
-        // TODO: use reduce to only get NODES and not edges 
-        let nodesNames = elements.map((ele) => {
+        let nodesNames = elements.filter((ele) => {
+            return 'position' in ele
+        }).map((ele) => {
             return ele.data
         })
         console.log('nodes namnames ', nodesNames)
         setAllNodes(nodesNames)
+
+        if (source !== false) {
+            setSourceDisabled(true)
+            setNodeFrom(source)
+        } 
     }, []);
 
 
   return (
     <Box sx={boxStyle}
         component='form'
-        autoComplete='off'>
+        autoComplete='off'
+        onSubmit={(e) => {
+            e.preventDefault()
+            addTransition({
+                transitionName,
+                nodeFrom,
+                nodeTo
+            })
+            close()
+        }}
+        >
             <Typography>
             Enter transition info
             </Typography>
             <div>
-                <TextField id='transitionName' label='Transition name' value={transitionName} onChange={(e) => setTransitionName(e.target.value)}/>
+                <TextField id='transitionName' label='Transition name' value={transitionName} required={true} onChange={(e) => setTransitionName(e.target.value)}/>
                 
-                <TextField select id='fromNode' label='From' value={nodeFrom} helperText='Select transition origin' onChange={(e) => setNodeFrom(e.target.value)}>
+                <TextField select id='fromNode' label='From' value={nodeFrom} disabled={sourceDisabled} helperText='Select transition origin' required={true} onChange={(e) => setNodeFrom(e.target.value)}>
                     {allNodes.map((options) => (
                         <MenuItem key={options.id} value={options.id}>
                             {options.label}
@@ -51,13 +73,16 @@ const AddTransitionModal = ( {elements} ) => {
                     ))}
                 </TextField>
 
-                <TextField select id='toNode' label='To' value={nodeTo} helperText='Select transition target' onChange={(e) => setNodeTo(e.target.value)}>
+                <TextField select id='toNode' label='To' value={nodeTo} helperText='Select transition target' required={true} onChange={(e) => setNodeTo(e.target.value)}>
                     {allNodes.map((options) => (
                         <MenuItem key={options.id} value={options.id}>
                             {options.label}
                         </MenuItem>
                     ))}
                 </TextField>
+                <Button type='submit'>
+                        Add Transition
+                </Button>
 
             </div>
 

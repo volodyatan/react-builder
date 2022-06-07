@@ -15,13 +15,6 @@ const Builder = () => {
         setCurrentTab(newValue);
         newValue === 'builder' ? setCurrentlyDisplayed(<DNDArea/>) : '';
         newValue === 'other' ? setCurrentlyDisplayed(<p>other</p>) : '';
-        // if (newValue === 'builder'){
-        //     styles.dndarea.visiblity = 'hidden';
-        //     styles.other.visiblity = 'visible'
-        // }else if (newValue === 'other'){
-        //     styles.dndarea.visiblity = 'visible';
-        //     styles.other.visiblity = 'hidden'
-        // }
     }
 
     return (

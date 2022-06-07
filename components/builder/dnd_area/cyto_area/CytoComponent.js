@@ -5,10 +5,93 @@ import styles from '../../../../styles/CytoComponent.module.css'
 
 import { useState, useEffect, useCallback } from 'react';
 import { useElementsContext, useElementsAddContext } from '../../../CONTEXT/ElementsProvider';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { Popover, Icon } from '@mui/material';
+import AddNodeModal from '../modals/AddNodeModal';
+import AddTransitionModal from '../modals/AddTransitionModal';
+import { Popover, Icon, Modal } from '@mui/material';
 
 Cytoscape.use(cxtmenu)
+
+const cytostyle = [ 
+  {
+    "selector": "node",
+    "style": {
+      "background-color": "LightSkyBlue",
+      "label": "data(label)",
+      "text-wrap": "wrap",
+      "shape": "round-rectangle",
+      "width": "200",
+      "height": "45",
+      "text-valign": "center",
+      "text-halign": "center",
+      "font-size": "19"
+    }
+  },
+  {
+    "selector": "edge",
+    "style": {
+      "width": 3,
+      "line-color": "#ccc",
+      "target-arrow-color": "#ccc",
+      "target-arrow-shape": "triangle",
+      "curve-style": "bezier",
+      "label": "data(label)",
+      "target-endpoint": "outside-to-node-or-label"
+    }
+  },
+  {
+    "selector": ":parent",
+    "style": {
+      "text-valign": "top",
+      "text-halign": "center",
+      "background-color": "Gainsboro"
+    }
+  },
+  {
+    "selector": ".eh-handle",
+    "style": {
+      "background-color": "red",
+      "width": 12,
+      "height": 12,
+      "shape": "ellipse",
+      "overlay-opacity": 0,
+      "border-width": 12, 
+      "border-opacity": 0
+    }
+  },
+
+  {
+    "selector": ".eh-hover",
+    "style": {
+      "background-color": "red"
+    }
+  },
+
+  {
+    "selector": ".eh-source",
+    "style": {
+      "border-width": 2,
+      "border-color": "red"
+    }
+  },
+
+  {
+    "selector": ".eh-target",
+    "style": {
+      "border-width": 2,
+      "border-color": "red"
+    }
+  },
+
+  {
+    "selector": ".eh-preview, .eh-ghost-edge",
+    "style": {
+      "background-color": "red",
+      "line-color": "red",
+      "target-arrow-color": "red",
+      "source-arrow-color": "red"
+    }
+  }
+]
 
 const CytoComponent = (  ) => {
     const [cy, setCy] = useState(null)
@@ -16,35 +99,51 @@ const CytoComponent = (  ) => {
     const elements = useElementsContext()
     const addElement = useElementsAddContext
 
-    const [rightClickMenu, setRightClickMenu] = useState(<></>)
-    
+    const [modalOpen, setModalOpen] = useState(false)
+    const [modalContent, setModalContent] = useState(<></>)
+
+    const handleOpenAddNode = () => {
+      setModalContent(<AddNodeModal close={handleModalClose}/>)
+      setModalOpen(true)
+    }
+  
+    const handleOpenAddTransition = (source) => {
+      setModalContent(<AddTransitionModal close={handleModalClose} source={source} />)
+      setModalOpen(true)
+    }
+  
+    const handleModalClose = () => {
+      setModalContent(<></>)
+      setModalOpen(false)
+    }
+
     useEffect(() => {
         console.log('CY  ', cy)
         // cy.centre()
         if (typeof cy !== Object)
             return
-        setCyStyle({ width: '100%' })
+        setCyStyle(cytostyle)
         cy.centre()
     }, [cy]);
 
 
-    const rightclick = useCallback((e) =>{
-        console.log('CLICKED!!! ... E', e)
-        let target = e.target
-        let position = e.renderedPosition
-        if (target.length > 0){
-            if(target.isNode()){
-                // TODO: working on context menu: https://github.com/iVis-at-Bilkent/cytoscape.js-context-menus
-                // change to this one tho... https://github.com/cytoscape/cytoscape.js-cxtmenu
+    // const rightclick = useCallback((e) =>{
+    //     console.log('CLICKED!!! ... E', e)
+    //     let target = e.target
+    //     let position = e.renderedPosition
+    //     if (target.length > 0){
+    //         if(target.isNode()){
+    //             // TODO: working on context menu: https://github.com/iVis-at-Bilkent/cytoscape.js-context-menus
+    //             // change to this one tho... https://github.com/cytoscape/cytoscape.js-cxtmenu
                 
-                console.log('its element')
-                console.log('node data', target.data())
-            }
-        }
-        if (e.button === 2) {
-            console.log('right click')
-        }
-    }, [setRightClickMenu])
+    //             console.log('its element')
+    //             console.log('node data', target.data())
+    //         }
+    //     }
+    //     if (e.button === 2) {
+    //         console.log('right click')
+    //     }
+    // }, [setRightClickMenu])
 
     // useEffect(() => {
     //     if (cy !== null){
@@ -65,7 +164,7 @@ const CytoComponent = (  ) => {
               fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
               content: '<p>delete node</p>', // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
-              select: function(ele){ // a function to execute when the command is selected
+              select: (ele) => { // a function to execute when the command is selected
                 console.log('second',  ele.id() ) // `ele` holds the reference to the active element
               },
               enabled: true // whether the command is selectable
@@ -74,8 +173,9 @@ const CytoComponent = (  ) => {
               fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
               content: '<p>add transition</p>', // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
-              select: function(ele){ // a function to execute when the command is selected
-                console.log('first ',  ele.id() ) // `ele` holds the reference to the active element
+              select: (ele) => { // a function to execute when the command is selected, `ele` holds the reference to the active element
+                console.log('first ',  ele.id() )
+                handleOpenAddTransition(ele.id())
               },
               enabled: true // whether the command is selectable
             },
@@ -123,7 +223,8 @@ const CytoComponent = (  ) => {
               content: '<p>add</p><p>node</p>', // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
-                console.log('first ' ) // `ele` holds the reference to the active element
+                console.log('first ' )
+                handleOpenAddNode()
               },
               enabled: true // whether the command is selectable
             },
@@ -164,12 +265,19 @@ const CytoComponent = (  ) => {
 
     return (
         <div>
+            {/* TODO: on node drop, update local storage position of node */}
             <CytoscapeComponent id="cyto" className={styles.cyto} elements={elements} style={cyStyle} onChange={(c) => console.log('cy', c)} cy={(cy) => { 
+                    cy.style(cytostyle)
                     cy.centre()
                     // console.log('cyyy ', cy)
                     setCy(cy)
                 }} />
-            {rightClickMenu}
+              <Modal open={modalOpen} onClose={handleModalClose} onContextMenu={(e)=> e.preventDefault()}>
+                <div>
+                  {modalContent}
+                </div>
+              </Modal>
+            {/* {rightClickMenu} */}
         </div>
     )
 }

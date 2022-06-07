@@ -3,6 +3,7 @@ import React, {useContext, useState, createContext, useEffect} from 'react'
 
 const ElementsContext = createContext()
 const ElementsAddNodeContext = createContext()
+const ElementsAddTransitionContext = createContext()
 
 const setDefault = (setElements) => {
     if(localStorage.getItem('elements') === null){
@@ -23,6 +24,11 @@ export function useElementsContext() {
 // pass in the element name 
 export function useElementsAddNodeContext() {
     return useContext(ElementsAddNodeContext)
+}
+
+// use this hook to add transition
+export function useElementsAddTransitionContext() {
+    return useContext(ElementsAddTransitionContext)
 }
 
 
@@ -50,10 +56,21 @@ export function ElementsProvider({ children }) {
         setElements(oldEles => [...oldEles, ele])
     }
 
+    const addTransition = (newTransition) => {
+        console.log('new transition .... ', newTransition)
+        let newId = uuid()
+        let tran = {
+            data: { source: newTransition.nodeFrom, target: newTransition.nodeTo, label: newTransition.transitionName }
+        }
+        setElements(oldEles => [...oldEles, tran])
+    }
+
     return (
         <ElementsContext.Provider value={elements}>
             <ElementsAddNodeContext.Provider value ={addElement}>
-                {children}
+                <ElementsAddTransitionContext.Provider value={addTransition}>
+                    {children}
+                </ElementsAddTransitionContext.Provider>
             </ElementsAddNodeContext.Provider>
         </ElementsContext.Provider>
     )

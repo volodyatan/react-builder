@@ -8,7 +8,7 @@ const CytoComponent = dynamic(() => import('./cyto_area/CytoComponent'), {
 });
 // import CytoComponent from './cyto_area/CytoComponent';
 
-const CytoArea = ( {elements} ) => {
+const CytoArea = ( ) => {
 
   return (
     <div>
