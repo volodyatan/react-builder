@@ -22,3 +22,17 @@
     margin-top: -4px;
 
   }
+
+  .flexContainer {
+      display: flex;
+  }
+
+  .flexCyto {
+    border-radius: 7px;
+    flex:9;
+    border: 2px solid black;
+  }
+
+  .flexCytoSidebar {
+    flex: 1;
+  }

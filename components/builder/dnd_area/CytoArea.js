@@ -16,10 +16,10 @@ const CytoArea = ( ) => {
         sx={{
           width: 'fill',
           height: 'auto',
-          backgroundColor: 'primary.dark',
+          backgroundColor: '#DCDCDC',
           '&:hover': {
-            backgroundColor: 'primary.main',
-            opacity: [0.9, 0.8, 0.7], 
+            backgroundColor: 'white',
+            // opacity: [0.9, 0.8, 0.7], 
           },
         }}>
         <CytoComponent />

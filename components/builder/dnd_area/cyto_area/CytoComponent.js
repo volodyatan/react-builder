@@ -8,6 +8,7 @@ import { useElementsContext, useElementsAddContext } from '../../../CONTEXT/Elem
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
 import { Popover, Icon, Modal } from '@mui/material';
+import CytoList from './CytoList.js'
 
 Cytoscape.use(cxtmenu)
 
@@ -20,22 +21,32 @@ const cytostyle = [
       "text-wrap": "wrap",
       "shape": "round-rectangle",
       "width": "200",
-      "height": "45",
+      "height": "75",
+      "text-max-width": "200",
+      // "text-overflow-wrap": "anywhere",
       "text-valign": "center",
       "text-halign": "center",
-      "font-size": "19"
+      "font-size": "19",
+      "border-width": "2",
+      "border-color": "#4169E1",
+      "padding": "3"
     }
   },
   {
     "selector": "edge",
     "style": {
-      "width": 3,
-      "line-color": "#ccc",
-      "target-arrow-color": "#ccc",
-      "target-arrow-shape": "triangle",
+      "width": 2,
+      "line-color": "black",
+      "target-arrow-color": "black",
+      "target-arrow-shape": "triangle-backcurve",
+      "arrow-scale": "2",
       "curve-style": "bezier",
       "label": "data(label)",
-      "target-endpoint": "outside-to-node-or-label"
+      "target-endpoint": "outside-to-node-or-label",
+      "text-rotation": "autorotate",
+      "text-margin-y": "-12",
+      "text-wrap": "wrap",
+      "text-max-width": "1000"
     }
   },
   {
@@ -95,7 +106,7 @@ const cytostyle = [
 
 const CytoComponent = (  ) => {
     const [cy, setCy] = useState(null)
-    const [cyStyle, setCyStyle] = useState({ width: '600px', height: '600px' })
+    const [cyStyle, setCyStyle] = useState({ width: '1000px', height: '800px' })
     const elements = useElementsContext()
     const addElement = useElementsAddContext
 
@@ -122,7 +133,7 @@ const CytoComponent = (  ) => {
         // cy.centre()
         if (typeof cy !== Object)
             return
-        setCyStyle(cytostyle)
+        setCyStyle({ width: '100px', height: '100px' })
         cy.centre()
     }, [cy]);
 
@@ -161,7 +172,8 @@ const CytoComponent = (  ) => {
           commands: [ // an array of commands to list in the menu or a function that returns the array
             
             { // example command
-              fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+              // fillColor: 'rgba(0, 32, 0, 0.75)', // optional: custom background color for item
+              fillColor: 'rgba(188, 43, 43,0.75)',
               content: '<p>delete node</p>', // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
@@ -170,7 +182,7 @@ const CytoComponent = (  ) => {
               enabled: true // whether the command is selectable
             },
             { // example command
-              fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+              // fillColor: 'rgba(48, 91, 212, 0.75)', // optional: custom background color for item
               content: '<p>add transition</p>', // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected, `ele` holds the reference to the active element
@@ -180,7 +192,7 @@ const CytoComponent = (  ) => {
               enabled: true // whether the command is selectable
             },
             { // example command
-              fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+              // fillColor: 'rgba(0, 32, 0, 0.75)', // optional: custom background color for item
               content: `<h6>CLOSE</h6>`, // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
@@ -191,15 +203,15 @@ const CytoComponent = (  ) => {
           ], // function( ele ){ return [ /*...*/ ] }, // a function that returns commands or a promise of commands
           fillColor: 'rgba(0, 0, 0, 0.75)', // the background colour of the menu
           activeFillColor: 'rgba(1, 105, 217, 0.75)', // the colour used to indicate the selected command
-          activePadding: 10, // additional size in pixels for the active command
-          indicatorSize: 14, // the size in pixels of the pointer to the active command, will default to the node size if the node size is smaller than the indicator size, 
-          separatorWidth: 3, // the empty spacing in pixels between successive commands
-          spotlightPadding: 4, // extra spacing in pixels between the element and the spotlight
-          adaptativeNodeSpotlightRadius: false, // specify whether the spotlight radius should adapt to the node size
-          minSpotlightRadius: 14, // the minimum radius in pixels of the spotlight (ignored for the node if adaptativeNodeSpotlightRadius is enabled but still used for the edge & background)
+          activePadding: 20, // additional size in pixels for the active command
+          indicatorSize: 40, // the size in pixels of the pointer to the active command, will default to the node size if the node size is smaller than the indicator size, 
+          separatorWidth: 10, // the empty spacing in pixels between successive commands
+          spotlightPadding: 5, // extra spacing in pixels between the element and the spotlight
+          adaptativeNodeSpotlightRadius: true, // specify whether the spotlight radius should adapt to the node size
+          minSpotlightRadius: 24, // the minimum radius in pixels of the spotlight (ignored for the node if adaptativeNodeSpotlightRadius is enabled but still used for the edge & background)
           maxSpotlightRadius: 28, // the maximum radius in pixels of the spotlight (ignored for the node if adaptativeNodeSpotlightRadius is enabled but still used for the edge & background)
           openMenuEvents: 'cxttapstart taphold', // space-separated cytoscape events that will open the menu; only `cxttapstart` and/or `taphold` work here
-          itemColor: 'black', // the colour of text in the command's content
+          itemColor: 'white', // the colour of text in the command's content
           itemTextShadowColor: 'transparent', // the text shadow colour of the command's content
           zIndex: 9999, // the z-index of the ui div
           atMouse: false, // draw menu at mouse position
@@ -219,8 +231,8 @@ const CytoComponent = (  ) => {
           commands: [ // an array of commands to list in the menu or a function that returns the array
             
             { // example command
-              fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
-              content: '<p>add</p><p>node</p>', // html/text content to be displayed in the menu
+              // fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+              content: '<h6>Add Node</h6>', // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
                 console.log('first ' )
@@ -229,7 +241,7 @@ const CytoComponent = (  ) => {
               enabled: true // whether the command is selectable
             },
             { // example command
-              fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
+              // fillColor: 'rgba(200, 200, 200, 0.75)', // optional: custom background color for item
               content: `<h6>CLOSE</h6>`, // html/text content to be displayed in the menu
               contentStyle: {content:'00d7'}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
@@ -249,7 +261,7 @@ const CytoComponent = (  ) => {
           minSpotlightRadius: 14, // the minimum radius in pixels of the spotlight (ignored for the node if adaptativeNodeSpotlightRadius is enabled but still used for the edge & background)
           maxSpotlightRadius: 28, // the maximum radius in pixels of the spotlight (ignored for the node if adaptativeNodeSpotlightRadius is enabled but still used for the edge & background)
           openMenuEvents: 'cxttapstart taphold', // space-separated cytoscape events that will open the menu; only `cxttapstart` and/or `taphold` work here
-          itemColor: 'black', // the colour of text in the command's content
+          itemColor: 'white', // the colour of text in the command's content
           itemTextShadowColor: 'transparent', // the text shadow colour of the command's content
           zIndex: 9999, // the z-index of the ui div
           atMouse: false, // draw menu at mouse position
@@ -264,7 +276,8 @@ const CytoComponent = (  ) => {
     
 
     return (
-        <div>
+      <div className={styles.flexContainer}>
+        <div className={styles.flexCyto}>
             {/* TODO: on node drop, update local storage position of node */}
             <CytoscapeComponent id="cyto" className={styles.cyto} elements={elements} style={cyStyle} onChange={(c) => console.log('cy', c)} cy={(cy) => { 
                     cy.style(cytostyle)
@@ -279,6 +292,11 @@ const CytoComponent = (  ) => {
               </Modal>
             {/* {rightClickMenu} */}
         </div>
+        <div className={styles.flexCytoSidebar}>
+            <CytoList/>
+        </div>  
+      </div>
+        
     )
 }
 
