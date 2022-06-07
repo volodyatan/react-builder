@@ -1,3 +1,24 @@
 .cyto {
     overflow: hidden;
 }
+
+.closebutton{
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+  
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -1px;
+    background: #000;
+
+    height: 8px;
+    margin-top: -4px;
+
+  }

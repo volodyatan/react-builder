@@ -17,6 +17,7 @@
     "cytoscape": "^3.21.1",
     "cytoscape-context-menus": "^4.1.0",
     "cytoscape-cxtmenu": "^3.4.0",
+    "import": "^0.0.6",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-cytoscapejs": "^1.2.1",
