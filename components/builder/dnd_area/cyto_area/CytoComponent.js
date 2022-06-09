@@ -178,6 +178,7 @@ const CytoComponent = (  ) => {
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
                 console.log('second',  ele.id() ) // `ele` holds the reference to the active element
+                
               },
               enabled: true // whether the command is selectable
             },

@@ -1,41 +1,29 @@
 import { Button, ButtonGroup, Modal, Box, Typography } from '@mui/material';
 import { useState } from 'react';
 
-import AddNodeModal from './modals/AddNodeModal';
-import AddTransitionModal from './modals/AddTransitionModal';
+import ModalBase from './modals/ModalBase';
 
 const DraggableNodes = ( ) => {
-  const [modalOpen, setModalOpen] = useState(false)
-  const [modalContent, setModalContent] = useState(<></>)
+  const [modalMode, setModalMode] = useState(false)
+  const [modalRender, setModalRender] = useState(<></>)
 
-  const handleOpenAddNode = () => {
-    setModalContent(<AddNodeModal close={handleModalClose}/>)
-    setModalOpen(true)
-  }
-
-  const handleOpenAddTransition = () => {
-    setModalContent(<AddTransitionModal close={handleModalClose}/>)
-    setModalOpen(true)
-  }
-
-  const handleModalClose = () => {
-    setModalContent(<></>)
-    setModalOpen(false)
-  }
+  useEffect(() => {
+    if (modalMode !== false){
+        setModalRender(<ModalBase modalMode={modalMode} setModalMode={setModalMode}/>)
+    }else{
+      setModalRender(<></>)
+    }
+  }, [modalMode]);
 
   return (
     <div>
       <ButtonGroup orientation='vertical'>
-        <Button onClick={handleOpenAddNode}>Add Node</Button>
-        <Button onClick={handleOpenAddTransition}>Add Transition</Button>
+        <Button onClick={()=> setModalMode('node')}>Add Node</Button>
+        <Button onClick={()=> setModalMode('transition')}>Add Transition</Button>
         <Button>Delete Node</Button>
         <Button>Third Button</Button>
       </ButtonGroup>
-      <Modal open={modalOpen} onClose={handleModalClose}>
-        <div>
-          {modalContent}
-        </div>
-      </Modal>
+      {modalRender}
     </div>
   )
 }

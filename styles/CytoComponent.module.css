@@ -25,6 +25,7 @@
 
   .flexContainer {
       display: flex;
+      position: relative;
   }
 
   .flexCyto {
