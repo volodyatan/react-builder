@@ -1,4 +1,4 @@
-import Nav from './Nav'
+import Nav from './nav/Nav'
 import styles from '../styles/Layout.module.css'
 
 const Layout = ( {children} ) => {
