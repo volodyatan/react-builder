@@ -3,6 +3,7 @@ import styles from '../../styles/Sidebar.module.css'
 import { AppBar, Toolbar, IconButton, Typography, Box, MenuList, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
+import TemplateModal from './modals/TemplateModal';
 import { SideBarItems } from './SidebarItems';
 import { grey } from '@mui/material/colors';
 import { alpha } from "@mui/material";
@@ -12,7 +13,7 @@ const sidebarClosed = {
     width: 'auto',
     height: '100vh',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-center',
     position: 'fixed',
     top: 0,
     left: '-100%',
@@ -24,7 +25,7 @@ const sidebarOpened = {
     width: 'auto',
     height: '100vh',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-center',
     position: 'fixed',
     top: 0,
     left: '-100%',
@@ -36,6 +37,17 @@ const sidebarOpened = {
 const Sidebar = ( {sidebar, toggleSidebar} ) => {
     const [sidebarStyle, setSidebarStyle] = useState(sidebarClosed)
 
+    const [modalMode, setModalMode] = useState(false)
+    const [modalRender, setModalRender] = useState(<></>)
+
+    useEffect(() => {
+        if (modalMode !== false){
+            setModalRender(<TemplateModal modalMode={modalMode} setModalMode={setModalMode}/>)
+        }else{
+            setModalRender(<></>)
+        }
+    }, [modalMode]);
+
     useEffect(() => {
         sidebar ? setSidebarStyle(sidebarOpened) : setSidebarStyle(sidebarClosed)
     }, [sidebar]);
@@ -44,19 +56,19 @@ const Sidebar = ( {sidebar, toggleSidebar} ) => {
         <div>
             <Box sx={sidebarStyle}>
                 {/* <h3>Sidebar</h3> */}
-                <MenuList>
-                    <MenuItem sx={{ mr: 2, color: 'white'}} onClick={toggleSidebar}>
+                <MenuList >
+                    <MenuItem sx={{ mr: 2, color: 'white', paddingBottom: '30px'}} onClick={toggleSidebar}>
                         <ListItemIcon >
                             <CloseRoundedIcon sx={{color: 'white'}}/>
                         </ListItemIcon>
                     </MenuItem>
                     {SideBarItems.map((item, idx) => {
                         return (
-                        <MenuItem sx={{ mr: 2, color: 'white'}} onClick={()=>{
+                        <MenuItem key={idx} sx={{ mr: 2, color: 'white'}} onClick={()=>{
                             toggleSidebar()
-
+                            setModalMode(item.action)
                         }}>
-                            <ListItemIcon >
+                            <ListItemIcon>
                                 {item.icon}
                             </ListItemIcon>
                             <ListItemText>
@@ -68,6 +80,9 @@ const Sidebar = ( {sidebar, toggleSidebar} ) => {
                 </MenuList>
                 
             </Box>
+
+            {modalRender}
+
             {sidebar &&
                <Box 
                sx={{

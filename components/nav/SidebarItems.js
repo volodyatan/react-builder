@@ -1,10 +1,11 @@
 import React from 'react'
-// load data
+// load data icon
 import DownloadingRoundedIcon from '@mui/icons-material/DownloadingRounded';
-// save data
+// save data icon
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
-// save data as 
+// save data as icon
 import SaveAsRoundedIcon from '@mui/icons-material/SaveAsRounded';
+
 
 const iconStyle = {
     color: 'white'
@@ -14,16 +15,16 @@ export const SideBarItems = [
     {
         title: "Load Template",
         icon: <DownloadingRoundedIcon sx={iconStyle}/>,
-        action: ''
+        action: 'load'
     },
     {
         title: "Save Template",
         icon: <SaveRoundedIcon sx={iconStyle}/>,
-        action: ''
+        action: 'save'
     },
-    {
-        title: "Save Template As",
-        icon: <SaveAsRoundedIcon sx={iconStyle}/>,
-        action: ''
-    }
+    // {
+    //     title: "Save Template As",
+    //     icon: <SaveAsRoundedIcon sx={iconStyle}/>,
+    //     action: ''
+    // }
 ]

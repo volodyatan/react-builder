@@ -23,14 +23,13 @@ function Nav() {
   });
 
   const [sidebar, setSidebar] = useState(false)
-  const [renderSidebar, setRenderSidebar] = useState(<></>)
 
   const toggleSidebar = () => setSidebar((curr) => !curr)
 
 
   useEffect(() => {
     console.log("side bare is now ", sidebar)
-    sidebar ? setRenderSidebar(<Sidebar sidebar={sidebar} toggleSidebar={toggleSidebar} />) : setRenderSidebar(<></>)
+    // sidebar ? setRenderSidebar(<Sidebar sidebar={sidebar} toggleSidebar={toggleSidebar} />) : setRenderSidebar(<></>)
   }, [sidebar]);
 
   return (
@@ -45,7 +44,6 @@ function Nav() {
 
           </Toolbar>
         </AppBar>
-        {/* {renderSidebar} */}
         <Sidebar sidebar={sidebar} toggleSidebar={toggleSidebar} />
       </ThemeProvider>
     </div>

@@ -1,15 +1,18 @@
 import Nav from './nav/Nav'
 import styles from '../styles/Layout.module.css'
+import { ElementsProvider } from './CONTEXT/ElementsProvider'
 
 const Layout = ( {children} ) => {
     return (
         <>
-            <Nav/>
-            <div className={styles.container}>
-                <main className={styles.main}>
-                    {children}
-                </main>
-            </div>
+            <ElementsProvider>
+                <Nav/>
+                <div className={styles.container}>
+                    <main className={styles.main}>
+                        {children}
+                    </main>
+                </div>
+            </ElementsProvider>
         </>
     )
 }
