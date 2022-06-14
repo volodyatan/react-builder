@@ -1,7 +1,10 @@
-import { Button, MenuItem, Box, Typography, TextField } from '@mui/material';
+import { Button, MenuItem, Box, Typography, TextField, CircularProgress, Card, CardContent } from '@mui/material';
 import React, { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 
-import { useElementsAddTransitionContext, useElementsContext } from '../../CONTEXT/ElementsProvider';
+import { useTemplateContext, useTemplateGetAllContext } from '../../CONTEXT/TemplateProvider';
+
+const ReactJson = dynamic(import('react-json-view'), { ssr: false });
 
 const boxStyle = {
     borderRadius: '25px',
@@ -9,7 +12,8 @@ const boxStyle = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    minWidth: '500px',
+    // width: 'auto',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -18,32 +22,51 @@ const boxStyle = {
     textAlign: 'center'
   }
 
-const LoadTemplateModal = ( {close, source = false} ) => {
-    const [transitionName, setTransitionName] = useState('')
-    const [nodeFrom, setNodeFrom] = useState('')
-    const [nodeTo, setNodeTo] = useState('')
-    const [sourceDisabled, setSourceDisabled] = useState(false)
+const LoadTemplateModal = ( {close} ) => {
+    const [isLoading, setIsLoading] = useState(true)
 
-    const [allNodes, setAllNodes] = useState([])
+    const [allTemplates, setAllTemplates] = useState([])
+    const [selectedTemplate, setSelectedTemplate] = useState('')
+    const [selectedTemplateData, setSelectedTemplateData] = useState(<></>)
 
-    const elements = useElementsContext()
-    const addTransition = useElementsAddTransitionContext()
+    const template = useTemplateContext()
+    const getAllTemplates = useTemplateGetAllContext()
 
     useEffect(() => {
-        let nodesNames = elements.filter((ele) => {
-            return 'position' in ele
-        }).map((ele) => {
-            return ele.data
-        })
-        console.log('nodes namnames ', nodesNames)
-        setAllNodes(nodesNames)
-
-        if (source !== false) {
-            setSourceDisabled(true)
-            setNodeFrom(source)
-        } 
+        const fetchTemplates = async () => {
+            const templates = await getAllTemplates()
+            setAllTemplates(templates)
+        }
+        setIsLoading(true)
+        fetchTemplates().catch(console.error)
     }, []);
 
+    useEffect(() => {
+        console.log('all temps ', allTemplates)
+        if (allTemplates !== {}){
+            setIsLoading(false)
+        }
+    }, [allTemplates]);
+
+    useEffect(() => {
+        console.log('selected temp ', selectedTemplate)
+        if (selectedTemplate !== '') {
+            // find template with selected id
+            let temp = allTemplates.filter((template)=> {
+                return template['_id'] == selectedTemplate
+            })
+            // set to template item data
+            setSelectedTemplateData(
+                <Card sx={{ minWidth:'100px', maxHeight:'400px', overflowY:'scroll'}}>
+                    <CardContent>
+                        <ReactJson theme='monokai' collapsed={4} displayDataTypes={false} collapseStringsAfterLength={10} src={temp[0].data}/>
+                    </CardContent>
+                </Card>
+            )
+            console.log('templ ', temp)
+        }
+
+    }, [selectedTemplate]);
 
   return (
     <Box sx={boxStyle}
@@ -51,40 +74,38 @@ const LoadTemplateModal = ( {close, source = false} ) => {
         autoComplete='off'
         onSubmit={(e) => {
             e.preventDefault()
-            addTransition({
-                transitionName,
-                nodeFrom,
-                nodeTo
-            })
+            // addTransition({
+            //     transitionName,
+            //     nodeFrom,
+            //     nodeTo
+            // })
+            console.log(' eeeee ', selectedTemplate)
             close()
         }}
         >
             <Typography>
-            Enter transition info
+            Select template
             </Typography>
-            <div>
-                <TextField id='transitionName' label='Transition name' value={transitionName} required={true} onChange={(e) => setTransitionName(e.target.value)}/>
-                
-                <TextField select id='fromNode' label='From' value={nodeFrom} disabled={sourceDisabled} helperText='Select transition origin' required={true} onChange={(e) => setNodeFrom(e.target.value)}>
-                    {allNodes.map((options) => (
-                        <MenuItem key={options.id} value={options.id}>
-                            {options.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
+            {!isLoading &&
+                <div>                    
+                    <TextField select id='selectedTemplate' label='Template ID' value={selectedTemplate} helperText='Select template' required={true} onChange={(e) => setSelectedTemplate(e.target.value)}>
+                        {allTemplates.map((options) => (
+                            <MenuItem key={options._id} value={options._id}>
+                                {options._id}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    {selectedTemplateData}
+                    <br/>
+                    <Button variant='outlined' type='submit'>
+                            Select Template
+                    </Button>
+                </div>
+            }
 
-                <TextField select id='toNode' label='To' value={nodeTo} helperText='Select transition target' required={true} onChange={(e) => setNodeTo(e.target.value)}>
-                    {allNodes.map((options) => (
-                        <MenuItem key={options.id} value={options.id}>
-                            {options.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <Button type='submit'>
-                        Add Transition
-                </Button>
-
-            </div>
+            {isLoading &&
+                <CircularProgress />
+            }
 
     </Box>
   )

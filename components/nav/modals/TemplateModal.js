@@ -25,7 +25,7 @@ const TemplateModal = ( {modalMode, setModalMode} ) => {
     }
 
     return (
-        <Modal open={modalOpen} onClose={handleModalClose}>
+        <Modal  open={modalOpen} onClose={handleModalClose}>
             <div>
             {modalContent}
             </div>

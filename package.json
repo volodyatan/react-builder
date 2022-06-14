@@ -14,6 +14,7 @@
     "@fontsource/roboto": "^4.5.7",
     "@mui/icons-material": "^5.8.2",
     "@mui/material": "^5.8.1",
+    "axios": "^0.27.2",
     "cytoscape": "^3.21.1",
     "cytoscape-context-menus": "^4.1.0",
     "cytoscape-cxtmenu": "^3.4.0",
@@ -22,6 +23,7 @@
     "react": "18.1.0",
     "react-cytoscapejs": "^1.2.1",
     "react-dom": "18.1.0",
+    "react-json-view": "^1.21.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

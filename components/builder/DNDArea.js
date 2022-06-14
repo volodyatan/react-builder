@@ -5,14 +5,12 @@ import styles from "../../styles/DNDArea.module.css"
 import { styled } from '@mui/material/styles';
 import { Grid } from '@mui/material';
 
-import { ElementsProvider } from "../CONTEXT/ElementsProvider";
 
 const DNDArea = () => {
   // const isBrowser = () => typeof window !== "undefined"
 
   return (
     <div>
-      <ElementsProvider>
         {/* <Grid  container spacing={2}>
           <Grid className={styles.grid} item xs={8}>
               <CytoArea />
@@ -23,7 +21,6 @@ const DNDArea = () => {
           </Grid>
         </Grid> */}
         <CytoArea />
-      </ElementsProvider>
       
     </div>
   )
