@@ -2,7 +2,7 @@ import { Button, MenuItem, Box, Typography, TextField, CircularProgress, Card, C
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
-import { useTemplateContext, useTemplateGetAllContext } from '../../CONTEXT/TemplateProvider';
+import { useTemplateContext, useTemplateGetAllContext, useTemplateSetContext } from '../../CONTEXT/TemplateProvider';
 
 const ReactJson = dynamic(import('react-json-view'), { ssr: false });
 
@@ -25,11 +25,17 @@ const boxStyle = {
 const LoadTemplateModal = ( {close} ) => {
     const [isLoading, setIsLoading] = useState(true)
 
+    // all retrieved templates from database TODO: make this only retrieve templates that belong to the user
     const [allTemplates, setAllTemplates] = useState([])
+    // stores currently selected template
     const [selectedTemplate, setSelectedTemplate] = useState('')
-    const [selectedTemplateData, setSelectedTemplateData] = useState(<></>)
+    // stores the json data that is displayed in the modal for the currently selected template
+    const [selectedTemplateJsonData, setSelectedTemplateJsonData] = useState(<></>)
+    // stores the data for currently selected template that will be saved in the template context
+    const [selectedTemplateData, setSelectedTemplateData] = useState('')
 
     const template = useTemplateContext()
+    const setTemplate = useTemplateSetContext()
     const getAllTemplates = useTemplateGetAllContext()
 
     useEffect(() => {
@@ -55,15 +61,17 @@ const LoadTemplateModal = ( {close} ) => {
             let temp = allTemplates.filter((template)=> {
                 return template['_id'] == selectedTemplate
             })
-            // set to template item data
-            setSelectedTemplateData(
+            console.log('TEMPPPP ', temp[0])
+            // set data for selected template
+            setSelectedTemplateData(temp[0])
+            // set display data for selected template
+            setSelectedTemplateJsonData(
                 <Card sx={{ minWidth:'100px', maxHeight:'400px', overflowY:'scroll'}}>
                     <CardContent>
                         <ReactJson theme='monokai' collapsed={4} displayDataTypes={false} collapseStringsAfterLength={10} src={temp[0].data}/>
                     </CardContent>
                 </Card>
             )
-            console.log('templ ', temp)
         }
 
     }, [selectedTemplate]);
@@ -74,12 +82,8 @@ const LoadTemplateModal = ( {close} ) => {
         autoComplete='off'
         onSubmit={(e) => {
             e.preventDefault()
-            // addTransition({
-            //     transitionName,
-            //     nodeFrom,
-            //     nodeTo
-            // })
             console.log(' eeeee ', selectedTemplate)
+            setTemplate(selectedTemplateData)
             close()
         }}
         >
@@ -95,7 +99,7 @@ const LoadTemplateModal = ( {close} ) => {
                             </MenuItem>
                         ))}
                     </TextField>
-                    {selectedTemplateData}
+                    {selectedTemplateJsonData}
                     <br/>
                     <Button variant='outlined' type='submit'>
                             Select Template

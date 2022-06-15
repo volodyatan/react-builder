@@ -5,7 +5,6 @@ import styles from "../../styles/DNDArea.module.css"
 import { styled } from '@mui/material/styles';
 import { Grid } from '@mui/material';
 
-
 const DNDArea = () => {
   // const isBrowser = () => typeof window !== "undefined"
 

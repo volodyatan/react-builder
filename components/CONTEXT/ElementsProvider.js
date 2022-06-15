@@ -6,14 +6,14 @@ const ElementsAddNodeContext = createContext()
 const ElementsDeleteNodeContext = createContext()
 const ElementsAddTransitionContext = createContext()
 
-const setDefault = (setElements) => {
+const setDefault = (setElems) => {
     if(localStorage.getItem('elements') === null){
         localStorage.setItem('elements', JSON.stringify([
             { data: { id: 'one', label: 'Node 1' }, position: { x: 0, y: 0 } },
-            { data: { id: 'two', label: 'Node 2' }, position: { x: 100, y: 0 } },
+            { data: { id: 'two', label: 'Node 2' }, position: { x: 400, y: 100 } },
             { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }]))
     }
-    return setElements(JSON.parse(localStorage.getItem('elements')))
+    return setElems(JSON.parse(localStorage.getItem('elements')))
 }
 
 // use this hook to get the elements
@@ -37,18 +37,21 @@ export function useElementsAddTransitionContext() {
     return useContext(ElementsAddTransitionContext)
 }
 
+// use this hook to delete 
+
 
 // creating context and custom hook to deal with elements in multiple components
 export function ElementsProvider({ children }) {
-    const [elements, setElements] = useState()
+    const [elements, setElems] = useState()
 
     // initialize elements in local storage, or load elements from local storage if they exist already 
     useEffect(() => {
-        setDefault(setElements)
+        setDefault(setElems)
     }, []);
 
     // every time elements gets updated, save to local storage
     useEffect(() => {
+        console.log('ELEMENTSSSSS ',elements)
         localStorage.getItem('elements') !== null && elements !== undefined ? localStorage.setItem('elements', JSON.stringify(elements)) : ''
     }, [elements]);
 
@@ -60,13 +63,23 @@ export function ElementsProvider({ children }) {
         let ele = {
             data: { id: newId, label: newElement }, position: { x: elelen*25, y: elelen*25 }
         }
-        setElements(oldEles => [...oldEles, ele])
+        setElems(oldEles => [...oldEles, ele])
     }
     const deleteNode = (elementId) => {
         // making deep copy
-        elems = JSON.parse(JSON.stringify(elements))
-        elems = elems.filter((item)=> item.data.id !== elementId)
-        setElements(elems)
+        let elems = JSON.parse(JSON.stringify(elements))
+        console.log('elems before ', elems)
+        // let elems = elements
+        elems = elems.filter((item)=> {
+            if('source' in item.data){
+                return item.data.source !== elementId && item.data.target !== elementId
+            }else{
+                return item.data.id !== elementId
+            }
+        })
+        console.log('elems are ', elems)
+        console.log('elements are ', elements)
+        setElems(old => elems)
     }
 
     // TRANSITIONS
@@ -74,7 +87,7 @@ export function ElementsProvider({ children }) {
         let tran = {
             data: { source: newTransition.nodeFrom, target: newTransition.nodeTo, label: newTransition.transitionName }
         }
-        setElements(oldEles => [...oldEles, tran])
+        setElems(oldEles => [...oldEles, tran])
     }
 
     return (

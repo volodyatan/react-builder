@@ -4,7 +4,7 @@ import Cytoscape from 'cytoscape'
 import styles from '../../../../styles/CytoComponent.module.css'
 
 import { useState, useEffect, useCallback } from 'react';
-import { useElementsContext, useElementsAddContext } from '../../../CONTEXT/ElementsProvider';
+import { useElementsContext, useElementsAddContext, useElementsDeleteNodeContext } from '../../../CONTEXT/ElementsProvider';
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
 import { Popover, Icon, Modal } from '@mui/material';
@@ -109,6 +109,7 @@ const CytoComponent = (  ) => {
     const [cyStyle, setCyStyle] = useState({ width: '1000px', height: '800px' })
     const elements = useElementsContext()
     const addElement = useElementsAddContext
+    const deleteNode = useElementsDeleteNodeContext()
 
     const [modalOpen, setModalOpen] = useState(false)
     const [modalContent, setModalContent] = useState(<></>)
@@ -178,7 +179,7 @@ const CytoComponent = (  ) => {
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
                 console.log('second',  ele.id() ) // `ele` holds the reference to the active element
-                
+                deleteNode(ele.id())
               },
               enabled: true // whether the command is selectable
             },
