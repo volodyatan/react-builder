@@ -1,6 +1,7 @@
-import { Button, Box, Typography, TextField } from '@mui/material';
+import { Button, Box, Typography, TextField, IconButton } from '@mui/material';
 import React, { useState, useEffect } from 'react'
 
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useElementsAddNodeContext } from '../../../CONTEXT/ElementsProvider';
 
 const boxStyle = {
@@ -37,6 +38,9 @@ const AddNodeModal = ( {close} ) => {
         addNode(nodeName)
         close()
       }}>
+        <IconButton onClick={()=> close()} sx={{position:'absolute', right:'2px', top:'2px'}}>
+                    <CloseRoundedIcon />
+            </IconButton>
         <Typography>
         Enter node info
         </Typography>

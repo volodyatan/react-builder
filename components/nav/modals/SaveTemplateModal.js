@@ -1,6 +1,7 @@
-import { Button, MenuItem, Box, Typography, TextField } from '@mui/material';
+import { Button, MenuItem, Box, Typography, TextField, IconButton } from '@mui/material';
 import React, { useState, useEffect } from 'react'
 
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useElementsAddNodeContext, useElementsAddTransitionContext, useElementsContext } from '../../CONTEXT/ElementsProvider';
 
 const boxStyle = {
@@ -59,6 +60,9 @@ const SaveTemplateModal = ( {close, source = false} ) => {
             close()
         }}
         >
+            <IconButton onClick={()=> close()} sx={{position:'absolute', right:'2px', top:'2px'}}>
+                    <CloseRoundedIcon />
+            </IconButton>
             <Typography>
             Enter transition info
             </Typography>

@@ -1,8 +1,10 @@
-import { Button, MenuItem, Box, Typography, TextField, CircularProgress, Card, CardContent } from '@mui/material';
+import { Button, MenuItem, Box, Typography, TextField, CircularProgress, Card, CardContent, IconButton } from '@mui/material';
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useTemplateContext, useTemplateGetAllContext, useTemplateSetContext } from '../../CONTEXT/TemplateProvider';
+import AlertComponent from '../../ALERTS/AlertComponent';
 
 const ReactJson = dynamic(import('react-json-view'), { ssr: false });
 
@@ -23,7 +25,11 @@ const boxStyle = {
   }
 
 const LoadTemplateModal = ( {close} ) => {
+    // displays loading circle if data is being fetched
     const [isLoading, setIsLoading] = useState(true)
+    // error message if templates could not be fetched
+    const [displayError, setDisplayError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
 
     // all retrieved templates from database TODO: make this only retrieve templates that belong to the user
     const [allTemplates, setAllTemplates] = useState([])
@@ -39,13 +45,24 @@ const LoadTemplateModal = ( {close} ) => {
     const getAllTemplates = useTemplateGetAllContext()
 
     useEffect(() => {
-        const fetchTemplates = async () => {
-            const templates = await getAllTemplates()
-            setAllTemplates(templates)
+        try{
+            const fetchTemplates = async () => {
+                const templates = await getAllTemplates()
+                console.log('templates ', templates)
+                setAllTemplates(templates)
+                if (templates == undefined){
+                    setDisplayError(true)
+                    setErrorMessage("Templates could not be fetched, please try again.")
+                    throw "Templates could not be fetched"
+                }
+                // if templates
+            }
+            setIsLoading(true)
+            fetchTemplates().catch(console.error)
+        }catch (e) {
+            console.log('ERROR: ',e)
         }
-        setIsLoading(true)
-        fetchTemplates().catch(console.error)
-    }, []);
+    }, [displayError]);
 
     useEffect(() => {
         console.log('all temps ', allTemplates)
@@ -87,11 +104,14 @@ const LoadTemplateModal = ( {close} ) => {
             close()
         }}
         >
-            <Typography>
-            Select template
-            </Typography>
-            {!isLoading &&
+            <IconButton onClick={()=> close()} sx={{position:'absolute', right:'2px', top:'2px'}}>
+                    <CloseRoundedIcon />
+            </IconButton>
+            {!isLoading && !displayError &&
                 <div>                    
+                    <Typography>
+                    Select template
+                    </Typography>
                     <TextField select id='selectedTemplate' label='Template ID' value={selectedTemplate} helperText='Select template' required={true} onChange={(e) => setSelectedTemplate(e.target.value)}>
                         {allTemplates.map((options) => (
                             <MenuItem key={options._id} value={options._id}>
@@ -110,7 +130,11 @@ const LoadTemplateModal = ( {close} ) => {
             {isLoading &&
                 <CircularProgress />
             }
-
+            {displayError &&
+                <div>
+                    <AlertComponent type='error' message={errorMessage} />
+                </div>
+            }
     </Box>
   )
 }
