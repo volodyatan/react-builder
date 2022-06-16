@@ -32,7 +32,8 @@ const AddTransitionModal = ( {close, source = false} ) => {
 
     useEffect(() => {
         let nodesNames = elements.filter((ele) => {
-            return 'position' in ele
+            // if element does not have a source property in data, it is a node TODO: create nodes using cy.add, then use group property to check if element is a node
+            return !('source' in ele.data)
         }).map((ele) => {
             return ele.data
         })
