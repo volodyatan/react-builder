@@ -65,21 +65,11 @@ export function ElementsProvider({ children }) {
         }
         setElems(oldEles => [...oldEles, ele])
     }
-    const deleteNode = (elementId) => {
-        // making deep copy
-        let elems = JSON.parse(JSON.stringify(elements))
-        console.log('elems before ', elems)
-        // let elems = elements
-        elems = elems.filter((item)=> {
-            if('source' in item.data){
-                return item.data.source !== elementId && item.data.target !== elementId
-            }else{
-                return item.data.id !== elementId
-            }
-        })
-        console.log('elems are ', elems)
-        console.log('elements are ', elements)
-        setElems(old => elems)
+    const deleteNode = (elementId, cy) => {
+
+        cy.remove(`[id = '${elementId}'],[source = '${elementId}'],[target = '${elementId}']`)
+
+        setElems(cy.json(true).elements)
     }
 
     // TRANSITIONS

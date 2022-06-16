@@ -3,7 +3,7 @@ import cxtmenu from 'cytoscape-cxtmenu';
 import Cytoscape from 'cytoscape'
 import styles from '../../../../styles/CytoComponent.module.css'
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useElementsContext, useElementsAddContext, useElementsDeleteNodeContext } from '../../../CONTEXT/ElementsProvider';
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
@@ -107,6 +107,7 @@ const cytostyle = [
 const CytoComponent = (  ) => {
     const [cy, setCy] = useState(null)
     const [cyStyle, setCyStyle] = useState({ width: '1000px', height: '800px' })
+    const [initialElements, setInitialElements] = useState([])
     const elements = useElementsContext()
     const addElement = useElementsAddContext
     const deleteNode = useElementsDeleteNodeContext()
@@ -129,13 +130,19 @@ const CytoComponent = (  ) => {
       setModalOpen(false)
     }
 
+    // useEffect(() => {
+      
+    //   setInitialElements(JSON.parse(JSON.stringify(elements)))
+      
+    // }, [elements]);
+
     useEffect(() => {
         console.log('CY  ', cy)
         // cy.centre()
         if (typeof cy !== Object)
             return
         setCyStyle({ width: '100px', height: '100px' })
-        cy.centre()
+        // cy.centre()
     }, [cy]);
 
 
@@ -179,7 +186,7 @@ const CytoComponent = (  ) => {
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
                 console.log('second',  ele.id() ) // `ele` holds the reference to the active element
-                deleteNode(ele.id())
+                deleteNode(ele.id(), cy)
               },
               enabled: true // whether the command is selectable
             },
@@ -281,10 +288,10 @@ const CytoComponent = (  ) => {
       <div className={styles.flexContainer}>
         <div className={styles.flexCyto}>
             {/* TODO: on node drop, update local storage position of node */}
-            <CytoscapeComponent id="cyto" className={styles.cyto} elements={elements} style={cyStyle} onChange={(c) => console.log('cy', c)} cy={(cy) => { 
+            <CytoscapeComponent id="cyto" className={styles.cyto} elements={[...elements]} style={cyStyle} onChange={(c) => console.log('change cy', c)} cy={(cy) => { 
                     cy.style(cytostyle)
                     cy.centre()
-                    // console.log('cyyy ', cy)
+                    console.log('cyyy ', cy)
                     setCy(cy)
                 }} />
               <Modal open={modalOpen} onClose={handleModalClose} onContextMenu={(e)=> e.preventDefault()}>
