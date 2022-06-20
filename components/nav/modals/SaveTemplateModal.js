@@ -64,9 +64,9 @@ const SaveTemplateModal = ( {close, source = false} ) => {
                     <CloseRoundedIcon />
             </IconButton>
             <Typography>
-            Enter transition info
+            Save template?
             </Typography>
-            <div>
+            {/* <div>
                 <TextField id='transitionName' label='Transition name' value={transitionName} required={true} onChange={(e) => setTransitionName(e.target.value)}/>
                 
                 <TextField select id='fromNode' label='From' value={nodeFrom} disabled={sourceDisabled} helperText='Select transition origin' required={true} onChange={(e) => setNodeFrom(e.target.value)}>
@@ -88,7 +88,7 @@ const SaveTemplateModal = ( {close, source = false} ) => {
                         Add Transition
                 </Button>
 
-            </div>
+            </div> */}
 
     </Box>
   )
