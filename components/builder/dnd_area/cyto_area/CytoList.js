@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 
 const buttonOpen = {border: 1, borderBottom: 0, borderTopLeftRadius: 5, borderTopRightRadius: 5, boxShadow: 1}
 
-export default function CytoList() {
+export default function CytoList( {setOpenDrawer} ) {
   const [modalMode, setModalMode] = useState(false)
   const [modalRender, setModalRender] = useState(<></>)
 
@@ -56,14 +56,14 @@ export default function CytoList() {
   return (
     <Box sx={{}}>
       <List
-        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
+        sx={{ width: 'auto'}}
         component="nav"
         aria-labelledby="nested-list-subheader"
-        subheader={
-          <ListSubheader sx={{boxShadow: 1}} component="div" id="nested-list-subheader">
-            Options
-          </ListSubheader>
-        }
+        // subheader={
+        //   <ListSubheader sx={{boxShadow: 1}} component="div" id="nested-list-subheader">
+        //     Options
+        //   </ListSubheader>
+        // }
       >
         <ListItemButton sx={transitionsButtonOpen} onClick={()=> toggleList('transitions')}>
           <ListItemIcon>
@@ -75,7 +75,10 @@ export default function CytoList() {
 
         <Collapse in={openTransitionsList} timeout="auto" unmountOnExit>
           <List sx={{border: 1, borderTop: 0, borderBottomLeftRadius: 5, borderBottomRightRadius: 5, boxShadow: 1}} component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4}} onClick={()=> setModalMode('transition')}>
+            <ListItemButton sx={{ pl: 4}} onClick={()=> {
+              setOpenDrawer(false)
+              setModalMode('transition')
+            }}>
               <ListItemIcon>
                 <AddBoxRoundedIcon />
               </ListItemIcon>
@@ -94,7 +97,10 @@ export default function CytoList() {
 
         <Collapse in={openNodeList} timeout="auto" unmountOnExit>
           <List sx={{border: 1, borderTop: 0, borderBottomLeftRadius: 5, borderBottomRightRadius: 5, boxShadow: 1}} component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4}} onClick={()=> setModalMode('node')}>
+            <ListItemButton sx={{ pl: 4}} onClick={()=> {
+              setOpenDrawer(false)
+              setModalMode('node')
+              }}>
               <ListItemIcon>
                 <AddCircleOutlineRoundedIcon />
               </ListItemIcon>

@@ -8,7 +8,11 @@ import { useElementsContext, useElementsSetContext, useElementsAddNodeContext, u
 import { useCyContext, useCySetContext } from '../../../CONTEXT/ElementsProvider';
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
-import { Popover, Icon, Modal } from '@mui/material';
+import { Popover, Icon, Modal, Box, SpeedDial, SpeedDialAction, SpeedDialIcon, Drawer, IconButton, ListSubheader } from '@mui/material';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import CytoList from './CytoList.js'
 
 Cytoscape.use(cxtmenu)
@@ -116,6 +120,8 @@ const CytoComponent = (  ) => {
 
     const [modalOpen, setModalOpen] = useState(false)
     const [modalContent, setModalContent] = useState(<></>)
+
+    const [openDrawer, setOpenDrawer] = useState(false)
 
     const handleOpenAddNode = () => {
       setModalContent(<AddNodeModal close={handleModalClose}/>)
@@ -299,6 +305,38 @@ const CytoComponent = (  ) => {
     return (
       <div className={styles.flexContainer}>
         <div className={styles.flexCyto}>
+            {/* <Box
+            sx={{
+              width: 'fill',
+              height: 'auto',
+              backgroundColor: 'lightblue',
+              '&:hover': {
+                backgroundColor: 'orange',
+                // opacity: [0.9, 0.8, 0.7], 
+              },
+            }}>
+
+            
+            </Box> */}
+            <SpeedDial
+              direction='right'
+              ariaLabel="Cyto Options"
+              sx={{ position: 'absolute', top: 10, left: 10 }}
+              icon={<SpeedDialIcon />}
+            >
+                <SpeedDialAction
+                  key='SaveCyto'
+                  icon={<SaveAltIcon/>}
+                  tooltipTitle='Save Cyto'
+                />
+            </SpeedDial>
+            <SpeedDial
+              hidden={openDrawer}
+              ariaLabel="Open options"
+              sx={{ position: 'absolute', top: 5, right: 15 }}
+              icon={<ChevronLeftIcon />}
+              onClick={()=> setOpenDrawer(true)}
+            />
             {/* TODO: on node drop, update local storage position of node */}
             <CytoscapeComponent id="cyto" className={styles.cyto}  style={cyStyle} onChange={(c) => console.log('CHANGNING... cy', c)} cy={(newcy) => { 
                     // newcy.style(cytostyle)
@@ -319,7 +357,49 @@ const CytoComponent = (  ) => {
             {/* {rightClickMenu} */}
         </div>
         <div className={styles.flexCytoSidebar}>
-            <CytoList/>
+          <Drawer
+            sx={{
+              width: 'auto',
+              height: '100%',
+              position: 'absolute',
+              // right: '10',
+              flexShrink: 0,
+              // color: 'grey',
+              '& .MuiDrawer-paper': {
+                // width: 'auto',
+                borderRadius: 5,
+                backgroundColor: '#F0F8FF',
+                minWidth: "250px",
+                position: "absolute",
+                right: "10%",
+                top: '10%',
+                bottom: '10%',
+                height: "80%",
+                zIndex: '100',
+                flexGrow: 1
+              },
+            }}
+            variant="persistent"
+            anchor="right"
+            open={openDrawer}
+          >
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              // padding: spacing(0, 1),
+              // necessary for content to be below app bar
+              // ...theme.mixins.toolbar,
+              justifyContent: 'flex-start',
+            }}>
+              <IconButton onClick={()=> setOpenDrawer(false)}>
+                <ChevronRightIcon/>
+              </IconButton>
+              <ListSubheader sx={{backgroundColor:'#F0F8FF'}}>
+                Options
+              </ListSubheader>
+            </Box>
+              <CytoList setOpenDrawer={setOpenDrawer}/>
+          </Drawer>
         </div>  
       </div>
         
