@@ -2,13 +2,24 @@ import React from 'react'
 import DNDArea from './builder/DNDArea'
 import styles from '../styles/Builder.module.css'
 import { Tabs, Tab, Card } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+import TemplateModal from './nav/modals/TemplateModal';
 
 const Builder = () => {
     const [currentlyDisplayed, setCurrentlyDisplayed] = useState(<DNDArea/>);
     const [currentTab, setCurrentTab] = useState('builder');
     const [dndstyle, setDndstyle] = useState({visiblity: 'visible'})
     const [otherstyle, setOtherStyle] = useState({visiblity: 'hidden'})
+
+    const [modalMode, setModalMode] = useState('load')
+    const [loadTemplate, setLoadTemplate] = useState(<TemplateModal  modalMode={modalMode} setModalMode={setModalMode}/>)
+
+    useEffect(() => {
+        if (modalMode === false){
+            setLoadTemplate(<></>)
+        }
+    }, [modalMode]);
 
     const handleChange = (event, newValue) => {
         console.log(' new val' ,newValue);
@@ -34,6 +45,7 @@ const Builder = () => {
 
 
             </main>
+            {loadTemplate}
         </div>
     )
 }

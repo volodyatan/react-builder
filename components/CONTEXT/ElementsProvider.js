@@ -1,6 +1,8 @@
 import { v4 as uuid } from 'uuid';
 import React, {useContext, useState, createContext, useEffect} from 'react'
 
+const CyContext = createContext()
+const CySetContext = createContext()
 const ElementsContext = createContext()
 const ElementsAddNodeContext = createContext()
 const ElementsDeleteNodeContext = createContext()
@@ -14,6 +16,15 @@ const setDefault = (setElems) => {
             { data: { source: 'one', target: 'two', label: 'Edge from Node1 to Node2' } }]))
     }
     return setElems(JSON.parse(localStorage.getItem('elements')))
+}
+
+// use this hook for cy component
+export function useCyContext() {
+    return useContext(CyContext)
+}
+// set cy
+export function useCySetContext() {
+    return useContext(CySetContext)
 }
 
 // use this hook to get the elements
@@ -42,6 +53,7 @@ export function useElementsAddTransitionContext() {
 
 // creating context and custom hook to deal with elements in multiple components
 export function ElementsProvider({ children }) {
+    const [cy, setCy] = useState()
     const [elements, setElems] = useState()
 
     // initialize elements in local storage, or load elements from local storage if they exist already 
@@ -65,6 +77,10 @@ export function ElementsProvider({ children }) {
         }
         setElems(oldEles => [...oldEles, ele])
     }
+
+    // TODO: change remove/add elements to only use the cy object... you can then remove elements 
+    // and keep removed elements in limbo to add back later (eg. undo function)
+    // OR can use stack to keep track of entire states of builder and restore previous states
     const deleteNode = (elementId, cy) => {
 
         cy.remove(`[id = '${elementId}'],[source = '${elementId}'],[target = '${elementId}']`)
@@ -81,14 +97,19 @@ export function ElementsProvider({ children }) {
     }
 
     return (
-        <ElementsContext.Provider value={elements}>
-            <ElementsAddNodeContext.Provider value ={addNode}>
-                <ElementsDeleteNodeContext.Provider value={deleteNode}>
-                    <ElementsAddTransitionContext.Provider value={addTransition}>
-                        {children}
-                    </ElementsAddTransitionContext.Provider>
-                </ElementsDeleteNodeContext.Provider>
-            </ElementsAddNodeContext.Provider>
-        </ElementsContext.Provider>
+        <CyContext.Provider value={cy}>
+            <CySetContext.Provider value={setCy}>
+                <ElementsContext.Provider value={elements}>
+                        <ElementsAddNodeContext.Provider value ={addNode}>
+                            <ElementsDeleteNodeContext.Provider value={deleteNode}>
+                                <ElementsAddTransitionContext.Provider value={addTransition}>
+                                    {children}
+                                </ElementsAddTransitionContext.Provider>
+                            </ElementsDeleteNodeContext.Provider>
+                        </ElementsAddNodeContext.Provider>
+                    </ElementsContext.Provider>
+            </CySetContext.Provider>
+        </CyContext.Provider>
+        
     )
 }

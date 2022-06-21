@@ -108,7 +108,7 @@ const LoadTemplateModal = ( {close} ) => {
                     <CloseRoundedIcon />
             </IconButton>
             {!isLoading && !displayError &&
-                <div>                    
+                <div>
                     <Typography>
                     Select template
                     </Typography>
@@ -123,6 +123,9 @@ const LoadTemplateModal = ( {close} ) => {
                     <br/>
                     <Button variant='outlined' type='submit'>
                             Select Template
+                    </Button><br/><br/>
+                    <Button variant='outlined' color='warning' onClick={()=> close()}>
+                            Close (Use Local Template)
                     </Button>
                 </div>
             }
