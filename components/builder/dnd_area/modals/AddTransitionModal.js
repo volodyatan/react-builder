@@ -2,7 +2,7 @@ import { Button, MenuItem, Box, Typography, TextField, IconButton } from '@mui/m
 import React, { useState, useEffect } from 'react'
 
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { useElementsAddTransitionContext, useElementsContext } from '../../../CONTEXT/ElementsProvider';
+import { useElementsAddTransitionContext, useCyContext } from '../../../CONTEXT/ElementsProvider';
 
 const boxStyle = {
     borderRadius: '25px',
@@ -27,15 +27,15 @@ const AddTransitionModal = ( {close, source = false} ) => {
 
     const [allNodes, setAllNodes] = useState([])
 
-    const elements = useElementsContext()
+    const cy = useCyContext()
     const addTransition = useElementsAddTransitionContext()
 
     useEffect(() => {
-        let nodesNames = elements.filter((ele) => {
+        let nodesNames = cy.elements().filter((ele) => {
             // if element does not have a source property in data, it is a node TODO: create nodes using cy.add, then use group property to check if element is a node
-            return !('source' in ele.data)
+            return !('source' in ele.data())
         }).map((ele) => {
-            return ele.data
+            return ele.data()
         })
         console.log('nodes namnames ', nodesNames)
         setAllNodes(nodesNames)

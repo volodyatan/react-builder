@@ -4,7 +4,8 @@ import Cytoscape from 'cytoscape'
 import styles from '../../../../styles/CytoComponent.module.css'
 
 import { useState, useEffect } from 'react';
-import { useElementsContext, useElementsAddContext, useElementsDeleteNodeContext } from '../../../CONTEXT/ElementsProvider';
+import { useElementsContext, useElementsSetContext, useElementsAddNodeContext, useElementsDeleteNodeContext } from '../../../CONTEXT/ElementsProvider';
+import { useCyContext, useCySetContext } from '../../../CONTEXT/ElementsProvider';
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
 import { Popover, Icon, Modal } from '@mui/material';
@@ -105,12 +106,12 @@ const cytostyle = [
 ]
 
 const CytoComponent = (  ) => {
-    const [cyInitizalized, setCyInitizalized] = useState(false)
-    const [cy, setCy] = useState(null)
     const [cyStyle, setCyStyle] = useState({ width: '1000px', height: '800px' })
-    
-    const elements = useElementsContext()
-    const addElement = useElementsAddContext
+
+    const cy = useCyContext()
+    const setCy = useCySetContext()
+
+    const addElement = useElementsAddNodeContext()
     const deleteNode = useElementsDeleteNodeContext()
 
     const [modalOpen, setModalOpen] = useState(false)
@@ -140,10 +141,19 @@ const CytoComponent = (  ) => {
     useEffect(() => {
         console.log('CY  ', cy)
         // cy.centre()
-        if (typeof cy !== Object)
+        if (cy === null)
             return
 
-        setCyStyle({ width: '100px', height: '100px' })
+        cy.style(cytostyle)
+        cy.centre()
+        console.log('cyyy ', cy)
+
+        // turning event listeners off before turning them on so that new identical listeners aren't created every time a re-render happens
+        cy.off('add remove').on('add remove', () => {
+          console.log('CY IS CHANINGGGG')
+          let eles = cy.elements().map(ele => ele.data())
+          console.log('cy ... ', eles)
+        })
         // cy.centre()
     }, [cy]);
 
@@ -290,16 +300,16 @@ const CytoComponent = (  ) => {
       <div className={styles.flexContainer}>
         <div className={styles.flexCyto}>
             {/* TODO: on node drop, update local storage position of node */}
-            <CytoscapeComponent id="cyto" className={styles.cyto} elements={[...elements]} style={cyStyle} onChange={(c) => console.log('CHANGNING... cy', c)} cy={(cy) => { 
-                    cy.style(cytostyle)
-                    cy.centre()
-                    console.log('cyyy ', cy)
-                    // turning event listener off before turning it on so that new listeners aren't created every time a re-render happens
-                    cy.off('add remove').on('add remove', () => {
-                      console.log('CY IS CHANINGGGG')
-                      
-                    })
-                    setCy(cy)
+            <CytoscapeComponent id="cyto" className={styles.cyto}  style={cyStyle} onChange={(c) => console.log('CHANGNING... cy', c)} cy={(newcy) => { 
+                    // newcy.style(cytostyle)
+                    // newcy.centre()
+                    // console.log('cyyy ', newcy)
+                    // // turning event listeners off before turning them on so that new identical listeners aren't created every time a re-render happens
+                    // newcy.off('add remove').on('add remove', () => {
+                    //   console.log('CY IS CHANINGGGG')
+                    //   console.log('cy ... ', cy)
+                    // })
+                    setCy(newcy)
                 }} />
               <Modal open={modalOpen} onClose={handleModalClose} onContextMenu={(e)=> e.preventDefault()}>
                 <div>
