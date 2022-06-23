@@ -24,11 +24,6 @@ const AddNodeModal = ( {close} ) => {
 
     const addNode = useElementsAddNodeContext()
 
-  const submitForm = () => {
-    addNode(nodeName)
-    close()
-  }
-
   return (
     <Box sx={boxStyle} 
       component='form' 

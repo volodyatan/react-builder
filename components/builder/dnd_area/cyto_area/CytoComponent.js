@@ -1,10 +1,11 @@
 import CytoscapeComponent from 'react-cytoscapejs';
 import cxtmenu from 'cytoscape-cxtmenu';
+import undoRedo from "cytoscape-undo-redo";
 import Cytoscape from 'cytoscape'
 import styles from '../../../../styles/CytoComponent.module.css'
 
 import { useState, useEffect } from 'react';
-import { useElementsAddNodeContext, useElementsDeleteNodeContext, useCySaveLocalStorageContext } from '../../../CONTEXT/ElementsProvider';
+import { useElementsAddNodeContext, useElementsDeleteNodeContext, useCySaveLocalStorageContext, useCySetUndoRedoContext, useCyUndoRedoActionContext } from '../../../CONTEXT/ElementsProvider';
 import { useCyContext, useCySetContext } from '../../../CONTEXT/ElementsProvider';
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
@@ -12,9 +13,12 @@ import CytoDrawer from './CytoDrawer';
 import { Modal, Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
+import RedoRoundedIcon from '@mui/icons-material/RedoRounded';
 import { Checkmark } from 'react-checkmark'
 
 Cytoscape.use(cxtmenu)
+Cytoscape.use(undoRedo)
 
 const cytostyle = [ 
   {
@@ -114,6 +118,9 @@ const CytoComponent = (  ) => {
     const cy = useCyContext()
     const setCy = useCySetContext()
     const saveCy = useCySaveLocalStorageContext()
+    const cySetUndoRedo = useCySetUndoRedoContext()
+    const cyUndoRedo = useCyUndoRedoActionContext()
+    const [undoset, setUndoset] = useState(false)
 
     const addElement = useElementsAddNodeContext()
     const deleteNode = useElementsDeleteNodeContext()
@@ -129,7 +136,7 @@ const CytoComponent = (  ) => {
 
     const changeSaveIcon = (icon) =>{
       if (icon == 'saving'){
-        setSaveIcon(<Checkmark color='#696969' size='medium'/>)
+        setSaveIcon(<Checkmark color='#228B22' size='fill'/>)
       }else if (icon == 'idle'){
         setSaveIcon(<SaveAltIcon/>)
       }
@@ -150,12 +157,6 @@ const CytoComponent = (  ) => {
       setModalOpen(false)
     }
 
-    // useEffect(() => {
-      
-    //   setInitialElements(JSON.parse(JSON.stringify(elements)))
-      
-    // }, [elements]);
-
     useEffect(() => {
         console.log('CY  ', cy)
         // cy.centre()
@@ -167,40 +168,13 @@ const CytoComponent = (  ) => {
         console.log('cyyy ', cy)
 
         // turning event listeners off before turning them on so that new identical listeners aren't created every time a re-render happens
-        cy.off('add remove').on('add remove', () => {
-          console.log('CY IS CHANINGGGG')
-          let eles = cy.elements().map(ele => ele.data())
-          console.log('cy ... ', eles)
-        })
+        // cy.off('add remove').on('add remove', () => {
+        //   console.log('CY IS CHANINGGGG')
+        //   let eles = cy.elements().map(ele => ele.data())
+        //   console.log('cy ... ', eles)
+        // })
         // cy.centre()
     }, [cy]);
-
-
-    // const rightclick = useCallback((e) =>{
-    //     console.log('CLICKED!!! ... E', e)
-    //     let target = e.target
-    //     let position = e.renderedPosition
-    //     if (target.length > 0){
-    //         if(target.isNode()){
-    //             // TODO: working on context menu: https://github.com/iVis-at-Bilkent/cytoscape.js-context-menus
-    //             // change to this one tho... https://github.com/cytoscape/cytoscape.js-cxtmenu
-                
-    //             console.log('its element')
-    //             console.log('node data', target.data())
-    //         }
-    //     }
-    //     if (e.button === 2) {
-    //         console.log('right click')
-    //     }
-    // }, [setRightClickMenu])
-
-    // useEffect(() => {
-    //     if (cy !== null){
-    //         // let cyto = document.getElementById('cyto')
-    //         cy.on('cxttapstart', rightclick)
-    //         return () => cy.removeListener('cxttapstart')
-    //     }
-    // }, [cy]);
 
     useEffect(() => {
       if (cy !== null) {
@@ -216,7 +190,7 @@ const CytoComponent = (  ) => {
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
               select: (ele) => { // a function to execute when the command is selected
                 console.log('second',  ele.id() ) // `ele` holds the reference to the active element
-                deleteNode(ele.id(), cy)
+                deleteNode(ele.id())
               },
               enabled: true // whether the command is selectable
             },
@@ -260,7 +234,7 @@ const CytoComponent = (  ) => {
         let menu = cy.cxtmenu(nodes)
         return () => menu.destroy()
       }
-    }, [cy]);
+    }, [undoset]);
 
     useEffect(() => {
       if (cy !== null) {
@@ -310,9 +284,24 @@ const CytoComponent = (  ) => {
         let menu = cy.cxtmenu(core)
         return () => menu.destroy()
       }
-    }, [cy]);
+    }, [undoset]);
 
-    
+    useEffect(() => {
+      if (cy !== null){
+        let options = {
+          isDebug: false, // Debug mode for console messages
+          actions: {},// actions to be added
+          undoableDrag: true, // Whether dragging nodes are undoable can be a function as well
+          stackSizeLimit: undefined, // Size limit of undo stack, note that the size of redo stack cannot exceed size of undo stack
+          ready: function () { // callback when undo-redo is ready
+            setUndoset(true)
+          }
+        }
+        let undoredo = cy.undoRedo(options)
+        cySetUndoRedo(undoredo)
+        // setUndoset(true)
+      }
+    }, [cy]);
 
     return (
       <div className={styles.flexContainer}>
@@ -337,20 +326,40 @@ const CytoComponent = (  ) => {
               icon={<SpeedDialIcon />}
               onOpen={()=> changeSaveIcon('idle')}
             >
-                <SpeedDialAction
-                  key='SaveCyto'
-                  icon={saveIcon}
-                  tooltipTitle='Save Cyto'
-                  onClick={()=> {
-                    saveCy()
-                    changeSaveIcon('saving')
-                  }}
-                />
+              <SpeedDialAction
+                key='SaveCyto'
+                icon={saveIcon}
+                tooltipTitle='Save Cyto'
+                onClick={()=> {
+                  changeSaveIcon('idle')
+                  saveCy()
+                  changeSaveIcon('saving')
+                }}
+              />
+              <SpeedDialAction
+                key='UndoCyto'
+                icon={<UndoRoundedIcon/>}
+                tooltipTitle='Undo'
+                onClick={()=> {
+                  console.log('undoing')
+                  cyUndoRedo('undo')
+                }}
+              />
+              <SpeedDialAction
+                key='RedoCyto'
+                icon={<RedoRoundedIcon/>}
+                tooltipTitle='Redo'
+                onClick={()=> {
+                  console.log('redoing')
+                  cyUndoRedo('redo')
+                }}
+              />
             </SpeedDial>
+            
             <SpeedDial
               hidden={openDrawer}
               ariaLabel="Open options"
-              sx={{ position: 'absolute', top: 5, right: 15 }}
+              sx={{ position: 'absolute', top: -5, right: 10 }}
               icon={<ChevronLeftIcon />}
               onClick={()=> setOpenDrawer(true)}
             />
