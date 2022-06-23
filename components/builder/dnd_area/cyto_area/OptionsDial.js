@@ -53,7 +53,7 @@ const OptionsDial = ( { saveIcon, changeSaveIcon, saveCy } ) => {
         }}
         />
         <SpeedDialAction
-        key='RedoCyto'
+        key='RecenterCyto'
         icon={<CenterFocusStrongRoundedIcon/>}
         tooltipTitle='Re-center'
         onClick={()=> {
