@@ -3,6 +3,7 @@ import React, {useContext, useState, createContext, useEffect} from 'react'
 
 const CyContext = createContext()
 const CySetContext = createContext()
+const CySaveLocalStorageContext = createContext()
 
 const ElementsAddNodeContext = createContext()
 const ElementsDeleteNodeContext = createContext()
@@ -25,6 +26,10 @@ export function useCyContext() {
 // set cy
 export function useCySetContext() {
     return useContext(CySetContext)
+}
+// for saving elements to local storage
+export function useCySaveLocalStorageContext() {
+    return useContext(CySaveLocalStorageContext)
 }
 
 // use this hook to add nodes
@@ -56,6 +61,11 @@ export function ElementsProvider({ children }) {
         }
     }, [cy]);
 
+    const saveCyLocalStorage = () => {
+        // console.log('cy ele ', cy.elements().map(ele => ele.json()))
+        localStorage.setItem('elements', JSON.stringify(cy.elements().map(ele => ele.json())))
+    }
+
     // NODES
     const addNode = (newElement) => {
         // create unique id for node
@@ -85,13 +95,15 @@ export function ElementsProvider({ children }) {
     return (
         <CyContext.Provider value={cy}>
             <CySetContext.Provider value={setCy}>
-                <ElementsAddNodeContext.Provider value ={addNode}>
-                    <ElementsDeleteNodeContext.Provider value={deleteNode}>
-                        <ElementsAddTransitionContext.Provider value={addTransition}>
-                            {children}
-                        </ElementsAddTransitionContext.Provider>
-                    </ElementsDeleteNodeContext.Provider>
-                </ElementsAddNodeContext.Provider>
+                <CySaveLocalStorageContext.Provider value={saveCyLocalStorage}>
+                    <ElementsAddNodeContext.Provider value ={addNode}>
+                        <ElementsDeleteNodeContext.Provider value={deleteNode}>
+                            <ElementsAddTransitionContext.Provider value={addTransition}>
+                                {children}
+                            </ElementsAddTransitionContext.Provider>
+                        </ElementsDeleteNodeContext.Provider>
+                    </ElementsAddNodeContext.Provider>
+                </CySaveLocalStorageContext.Provider>
             </CySetContext.Provider>
         </CyContext.Provider>
         

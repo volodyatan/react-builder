@@ -36,4 +36,9 @@
 
   .flexCytoSidebar {
     flex: 1;
+    position: inherit;
+    left: 25%;
+    right: 25%;
+    width: inherit;
+    height: inherit;
   }

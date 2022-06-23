@@ -4,16 +4,15 @@ import Cytoscape from 'cytoscape'
 import styles from '../../../../styles/CytoComponent.module.css'
 
 import { useState, useEffect } from 'react';
-import { useElementsContext, useElementsSetContext, useElementsAddNodeContext, useElementsDeleteNodeContext } from '../../../CONTEXT/ElementsProvider';
+import { useElementsAddNodeContext, useElementsDeleteNodeContext, useCySaveLocalStorageContext } from '../../../CONTEXT/ElementsProvider';
 import { useCyContext, useCySetContext } from '../../../CONTEXT/ElementsProvider';
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
-import { Popover, Icon, Modal, Box, SpeedDial, SpeedDialAction, SpeedDialIcon, Drawer, IconButton, ListSubheader } from '@mui/material';
+import CytoDrawer from './CytoDrawer';
+import { Modal, Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
-import CytoList from './CytoList.js'
+import { Checkmark } from 'react-checkmark'
 
 Cytoscape.use(cxtmenu)
 
@@ -114,6 +113,7 @@ const CytoComponent = (  ) => {
 
     const cy = useCyContext()
     const setCy = useCySetContext()
+    const saveCy = useCySaveLocalStorageContext()
 
     const addElement = useElementsAddNodeContext()
     const deleteNode = useElementsDeleteNodeContext()
@@ -122,6 +122,18 @@ const CytoComponent = (  ) => {
     const [modalContent, setModalContent] = useState(<></>)
 
     const [openDrawer, setOpenDrawer] = useState(false)
+
+    // this controls the icon in the speed dial, shows checkmark when pressed
+    // use changeSaveIcon to change icon from saving to idle
+    const [saveIcon, setSaveIcon] = useState(<SaveAltIcon/>)
+
+    const changeSaveIcon = (icon) =>{
+      if (icon == 'saving'){
+        setSaveIcon(<Checkmark color='#696969' size='medium'/>)
+      }else if (icon == 'idle'){
+        setSaveIcon(<SaveAltIcon/>)
+      }
+    }
 
     const handleOpenAddNode = () => {
       setModalContent(<AddNodeModal close={handleModalClose}/>)
@@ -323,11 +335,16 @@ const CytoComponent = (  ) => {
               ariaLabel="Cyto Options"
               sx={{ position: 'absolute', top: 10, left: 10 }}
               icon={<SpeedDialIcon />}
+              onOpen={()=> changeSaveIcon('idle')}
             >
                 <SpeedDialAction
                   key='SaveCyto'
-                  icon={<SaveAltIcon/>}
+                  icon={saveIcon}
                   tooltipTitle='Save Cyto'
+                  onClick={()=> {
+                    saveCy()
+                    changeSaveIcon('saving')
+                  }}
                 />
             </SpeedDial>
             <SpeedDial
@@ -357,49 +374,7 @@ const CytoComponent = (  ) => {
             {/* {rightClickMenu} */}
         </div>
         <div className={styles.flexCytoSidebar}>
-          <Drawer
-            sx={{
-              width: 'auto',
-              height: '100%',
-              position: 'absolute',
-              // right: '10',
-              flexShrink: 0,
-              // color: 'grey',
-              '& .MuiDrawer-paper': {
-                // width: 'auto',
-                borderRadius: 5,
-                backgroundColor: '#F0F8FF',
-                minWidth: "250px",
-                position: "absolute",
-                right: "10%",
-                top: '10%',
-                bottom: '10%',
-                height: "80%",
-                zIndex: '100',
-                flexGrow: 1
-              },
-            }}
-            variant="persistent"
-            anchor="right"
-            open={openDrawer}
-          >
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              // padding: spacing(0, 1),
-              // necessary for content to be below app bar
-              // ...theme.mixins.toolbar,
-              justifyContent: 'flex-start',
-            }}>
-              <IconButton onClick={()=> setOpenDrawer(false)}>
-                <ChevronRightIcon/>
-              </IconButton>
-              <ListSubheader sx={{backgroundColor:'#F0F8FF'}}>
-                Options
-              </ListSubheader>
-            </Box>
-              <CytoList setOpenDrawer={setOpenDrawer}/>
-          </Drawer>
+          <CytoDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
         </div>  
       </div>
         

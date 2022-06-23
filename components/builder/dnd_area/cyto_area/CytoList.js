@@ -76,7 +76,7 @@ export default function CytoList( {setOpenDrawer} ) {
         <Collapse in={openTransitionsList} timeout="auto" unmountOnExit>
           <List sx={{border: 1, borderTop: 0, borderBottomLeftRadius: 5, borderBottomRightRadius: 5, boxShadow: 1}} component="div" disablePadding>
             <ListItemButton sx={{ pl: 4}} onClick={()=> {
-              setOpenDrawer(false)
+              // setOpenDrawer(false)
               setModalMode('transition')
             }}>
               <ListItemIcon>
@@ -98,7 +98,7 @@ export default function CytoList( {setOpenDrawer} ) {
         <Collapse in={openNodeList} timeout="auto" unmountOnExit>
           <List sx={{border: 1, borderTop: 0, borderBottomLeftRadius: 5, borderBottomRightRadius: 5, boxShadow: 1}} component="div" disablePadding>
             <ListItemButton sx={{ pl: 4}} onClick={()=> {
-              setOpenDrawer(false)
+              // setOpenDrawer(false)
               setModalMode('node')
               }}>
               <ListItemIcon>
