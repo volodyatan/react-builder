@@ -78,6 +78,8 @@ export function ElementsProvider({ children }) {
 
             cy.style(cytostyle)
             cy.centre()
+            cy.maxZoom(2.0)
+            cy.minZoom(0.2)
         }
     }, [cy]);
 
@@ -99,7 +101,7 @@ export function ElementsProvider({ children }) {
     // cy misc actions
     const cyAction = (action) => {
         if (action === 're-center'){
-            cy.centre()
+            cy.fit()
         }
     }
 
