@@ -1,9 +1,21 @@
+// react
 import React from 'react'
+
+// context
+import { useCyActionContext, useCyUndoRedoActionContext } from '../../../CONTEXT/ElementsProvider';
+
+// material ui
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
+
+// material icons
 import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
 import RedoRoundedIcon from '@mui/icons-material/RedoRounded';
+import CenterFocusStrongRoundedIcon from '@mui/icons-material/CenterFocusStrongRounded';
 
-const OptionsDial = ( { saveIcon, changeSaveIcon, saveCy, cyUndoRedo} ) => {
+const OptionsDial = ( { saveIcon, changeSaveIcon, saveCy } ) => {
+    const cyUndoRedo = useCyUndoRedoActionContext()
+    const cyAction = useCyActionContext()
+
   return (
     <SpeedDial
         direction='right'
@@ -38,6 +50,15 @@ const OptionsDial = ( { saveIcon, changeSaveIcon, saveCy, cyUndoRedo} ) => {
         onClick={()=> {
             console.log('redoing')
             cyUndoRedo('redo')
+        }}
+        />
+        <SpeedDialAction
+        key='RedoCyto'
+        icon={<CenterFocusStrongRoundedIcon/>}
+        tooltipTitle='Re-center'
+        onClick={()=> {
+            console.log('redoing')
+            cyAction('re-center')
         }}
         />
     </SpeedDial>

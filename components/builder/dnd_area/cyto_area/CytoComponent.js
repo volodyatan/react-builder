@@ -1,8 +1,3 @@
-import CytoscapeComponent from 'react-cytoscapejs';
-import cxtmenu from 'cytoscape-cxtmenu';
-import undoRedo from "cytoscape-undo-redo";
-import Cytoscape from 'cytoscape'
-
 // react/next
 import styles from '../../../../styles/CytoComponent.module.css'
 import { useState, useEffect } from 'react';
@@ -18,9 +13,19 @@ import OptionsDial from './OptionsDial';
 import CytoDrawer from './CytoDrawer';
 
 // material ui
-import { Modal, Box, SpeedDial } from '@mui/material';
+import { Modal, SpeedDial } from '@mui/material';
+
+// material icons
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+
+// cytoscape
+import CytoscapeComponent from 'react-cytoscapejs';
+import Cytoscape from 'cytoscape'
+
+//cytoscape addons
+import cxtmenu from 'cytoscape-cxtmenu';
+import undoRedo from "cytoscape-undo-redo";
 
 // installed components
 import { Checkmark } from 'react-checkmark'
@@ -35,7 +40,6 @@ const CytoComponent = (  ) => {
     const setCy = useCySetContext()
     const saveCy = useCySaveLocalStorageContext()
     const cySetUndoRedo = useCySetUndoRedoContext()
-    const cyUndoRedo = useCyUndoRedoActionContext()
     const [undoset, setUndoset] = useState(false)
 
     const addElement = useElementsAddNodeContext()
@@ -233,7 +237,7 @@ const CytoComponent = (  ) => {
 
             
             </Box> */}
-            <OptionsDial saveIcon={saveIcon} changeSaveIcon={changeSaveIcon} saveCy={saveCy} cyUndoRedo={cyUndoRedo}/>
+            <OptionsDial saveIcon={saveIcon} changeSaveIcon={changeSaveIcon} saveCy={saveCy}/>
             <SpeedDial
               hidden={openDrawer}
               ariaLabel="Open options"

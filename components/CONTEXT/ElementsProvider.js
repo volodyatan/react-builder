@@ -1,11 +1,15 @@
-import { v4 as uuid } from 'uuid';
+// react
 import React, {useContext, useState, createContext, useEffect} from 'react'
+
+// installed libaries
+import { v4 as uuid } from 'uuid';
 
 const CyContext = createContext()
 const CySetContext = createContext()
 const CySaveLocalStorageContext = createContext()
 const CySetUndoRedoContext = createContext()
 const CyUndoRedoActionContext = createContext()
+const CyActionContext = createContext()
 
 const ElementsAddNodeContext = createContext()
 const ElementsDeleteNodeContext = createContext()
@@ -33,12 +37,17 @@ export function useCySetContext() {
 export function useCySaveLocalStorageContext() {
     return useContext(CySaveLocalStorageContext)
 }
-// for undo-redo addon
+// for setting undo-redo
 export function useCySetUndoRedoContext() {
     return useContext(CySetUndoRedoContext)
 }
+// for performing undo-redo actions
 export function useCyUndoRedoActionContext() {
     return useContext(CyUndoRedoActionContext)
+}
+// for misc cytoscape actions
+export function useCyActionContext() {
+    return useContext(CyActionContext)
 }
 
 // use this hook to add nodes
@@ -56,8 +65,6 @@ export function useElementsDeleteNodeContext() {
 export function useElementsAddTransitionContext() {
     return useContext(ElementsAddTransitionContext)
 }
-
-// use this hook to delete 
 
 // creating context and custom hook to deal with elements in multiple components
 export function ElementsProvider({ children }) {
@@ -89,6 +96,13 @@ export function ElementsProvider({ children }) {
         }
     }
 
+    // cy misc actions
+    const cyAction = (action) => {
+        if (action === 're-center'){
+            cy.centre()
+        }
+    }
+
     // NODES
     const addNode = (newElement) => {
         // create unique id for node
@@ -97,17 +111,15 @@ export function ElementsProvider({ children }) {
         let ele = {
             data: { id: newId, label: newElement }, position: { x: 5*25, y: 5*25 }
         }
-        // cy.add(ele)
-        console.log('undo redo ', undoredo)
+        // use undoredo to perform add action
         undoredo.do('add', ele)
     }
 
     // TODO: keep removed elements in limbo to add back later (eg. undo function)
     // OR can use stack to keep track of entire states of builder and restore previous states
     const deleteNode = (elementId) => {
-        console.log('undo redo ', undoredo)
 
-        // cy.remove(`[id = '${elementId}'],[source = '${elementId}'],[target = '${elementId}']`)
+        // find nodes to delete using cy selector
         let selected = cy.$(`[id = '${elementId}'],[source = '${elementId}'],[target = '${elementId}']`)
         undoredo.do('remove', selected)
     }
@@ -127,13 +139,15 @@ export function ElementsProvider({ children }) {
                 <CySaveLocalStorageContext.Provider value={saveCyLocalStorage}>
                     <CySetUndoRedoContext.Provider value={setUndoredo}>
                         <CyUndoRedoActionContext.Provider value={undoRedoAction}>
-                            <ElementsAddNodeContext.Provider value ={addNode}>
-                                <ElementsDeleteNodeContext.Provider value={deleteNode}>
-                                    <ElementsAddTransitionContext.Provider value={addTransition}>
-                                        {children}
-                                    </ElementsAddTransitionContext.Provider>
-                                </ElementsDeleteNodeContext.Provider>
-                            </ElementsAddNodeContext.Provider>
+                            <CyActionContext.Provider value={cyAction}>
+                                <ElementsAddNodeContext.Provider value ={addNode}>
+                                    <ElementsDeleteNodeContext.Provider value={deleteNode}>
+                                        <ElementsAddTransitionContext.Provider value={addTransition}>
+                                            {children}
+                                        </ElementsAddTransitionContext.Provider>
+                                    </ElementsDeleteNodeContext.Provider>
+                                </ElementsAddNodeContext.Provider>
+                            </CyActionContext.Provider>
                         </CyUndoRedoActionContext.Provider>
                     </CySetUndoRedoContext.Provider>
                 </CySaveLocalStorageContext.Provider>
