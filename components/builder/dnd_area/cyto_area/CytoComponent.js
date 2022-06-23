@@ -2,115 +2,31 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import cxtmenu from 'cytoscape-cxtmenu';
 import undoRedo from "cytoscape-undo-redo";
 import Cytoscape from 'cytoscape'
-import styles from '../../../../styles/CytoComponent.module.css'
 
+// react/next
+import styles from '../../../../styles/CytoComponent.module.css'
 import { useState, useEffect } from 'react';
+
+// context
 import { useElementsAddNodeContext, useElementsDeleteNodeContext, useCySaveLocalStorageContext, useCySetUndoRedoContext, useCyUndoRedoActionContext } from '../../../CONTEXT/ElementsProvider';
 import { useCyContext, useCySetContext } from '../../../CONTEXT/ElementsProvider';
+
+// custom components
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
+import OptionsDial from './OptionsDial';
 import CytoDrawer from './CytoDrawer';
-import { Modal, Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+
+// material ui
+import { Modal, Box, SpeedDial } from '@mui/material';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
-import RedoRoundedIcon from '@mui/icons-material/RedoRounded';
+
+// installed components
 import { Checkmark } from 'react-checkmark'
 
 Cytoscape.use(cxtmenu)
 Cytoscape.use(undoRedo)
-
-const cytostyle = [ 
-  {
-    "selector": "node",
-    "style": {
-      "background-color": "LightSkyBlue",
-      "label": "data(label)",
-      "text-wrap": "wrap",
-      "shape": "round-rectangle",
-      "width": "200",
-      "height": "75",
-      "text-max-width": "200",
-      // "text-overflow-wrap": "anywhere",
-      "text-valign": "center",
-      "text-halign": "center",
-      "font-size": "19",
-      "border-width": "2",
-      "border-color": "#4169E1",
-      "padding": "3"
-    }
-  },
-  {
-    "selector": "edge",
-    "style": {
-      "width": 2,
-      "line-color": "black",
-      "target-arrow-color": "black",
-      "target-arrow-shape": "triangle-backcurve",
-      "arrow-scale": "2",
-      "curve-style": "bezier",
-      "label": "data(label)",
-      "target-endpoint": "outside-to-node-or-label",
-      "text-rotation": "autorotate",
-      "text-margin-y": "-12",
-      "text-wrap": "wrap",
-      "text-max-width": "1000"
-    }
-  },
-  {
-    "selector": ":parent",
-    "style": {
-      "text-valign": "top",
-      "text-halign": "center",
-      "background-color": "Gainsboro"
-    }
-  },
-  {
-    "selector": ".eh-handle",
-    "style": {
-      "background-color": "red",
-      "width": 12,
-      "height": 12,
-      "shape": "ellipse",
-      "overlay-opacity": 0,
-      "border-width": 12, 
-      "border-opacity": 0
-    }
-  },
-
-  {
-    "selector": ".eh-hover",
-    "style": {
-      "background-color": "red"
-    }
-  },
-
-  {
-    "selector": ".eh-source",
-    "style": {
-      "border-width": 2,
-      "border-color": "red"
-    }
-  },
-
-  {
-    "selector": ".eh-target",
-    "style": {
-      "border-width": 2,
-      "border-color": "red"
-    }
-  },
-
-  {
-    "selector": ".eh-preview, .eh-ghost-edge",
-    "style": {
-      "background-color": "red",
-      "line-color": "red",
-      "target-arrow-color": "red",
-      "source-arrow-color": "red"
-    }
-  }
-]
 
 const CytoComponent = (  ) => {
     const [cyStyle, setCyStyle] = useState({ width: '1000px', height: '800px' })
@@ -163,8 +79,6 @@ const CytoComponent = (  ) => {
         if (cy === null)
             return
 
-        cy.style(cytostyle)
-        cy.centre()
         console.log('cyyy ', cy)
 
         // turning event listeners off before turning them on so that new identical listeners aren't created every time a re-render happens
@@ -319,43 +233,7 @@ const CytoComponent = (  ) => {
 
             
             </Box> */}
-            <SpeedDial
-              direction='right'
-              ariaLabel="Cyto Options"
-              sx={{ position: 'absolute', top: 10, left: 10 }}
-              icon={<SpeedDialIcon />}
-              onOpen={()=> changeSaveIcon('idle')}
-            >
-              <SpeedDialAction
-                key='SaveCyto'
-                icon={saveIcon}
-                tooltipTitle='Save Cyto'
-                onClick={()=> {
-                  changeSaveIcon('idle')
-                  saveCy()
-                  changeSaveIcon('saving')
-                }}
-              />
-              <SpeedDialAction
-                key='UndoCyto'
-                icon={<UndoRoundedIcon/>}
-                tooltipTitle='Undo'
-                onClick={()=> {
-                  console.log('undoing')
-                  cyUndoRedo('undo')
-                }}
-              />
-              <SpeedDialAction
-                key='RedoCyto'
-                icon={<RedoRoundedIcon/>}
-                tooltipTitle='Redo'
-                onClick={()=> {
-                  console.log('redoing')
-                  cyUndoRedo('redo')
-                }}
-              />
-            </SpeedDial>
-            
+            <OptionsDial saveIcon={saveIcon} changeSaveIcon={changeSaveIcon} saveCy={saveCy} cyUndoRedo={cyUndoRedo}/>
             <SpeedDial
               hidden={openDrawer}
               ariaLabel="Open options"

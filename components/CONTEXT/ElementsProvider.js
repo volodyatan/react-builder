@@ -68,6 +68,9 @@ export function ElementsProvider({ children }) {
     useEffect(() => {
         if (cy !== null){
             setDefault(cy)
+
+            cy.style(cytostyle)
+            cy.centre()
         }
     }, [cy]);
 
@@ -139,3 +142,95 @@ export function ElementsProvider({ children }) {
         
     )
 }
+
+const cytostyle = [ 
+    {
+      "selector": "node",
+      "style": {
+        "background-color": "LightSkyBlue",
+        "label": "data(label)",
+        "text-wrap": "wrap",
+        "shape": "round-rectangle",
+        "width": "200",
+        "height": "75",
+        "text-max-width": "200",
+        // "text-overflow-wrap": "anywhere",
+        "text-valign": "center",
+        "text-halign": "center",
+        "font-size": "19",
+        "border-width": "2",
+        "border-color": "#4169E1",
+        "padding": "3"
+      }
+    },
+    {
+      "selector": "edge",
+      "style": {
+        "width": 2,
+        "line-color": "black",
+        "target-arrow-color": "black",
+        "target-arrow-shape": "triangle-backcurve",
+        "arrow-scale": "2",
+        "curve-style": "bezier",
+        "label": "data(label)",
+        "target-endpoint": "outside-to-node-or-label",
+        "text-rotation": "autorotate",
+        "text-margin-y": "-12",
+        "text-wrap": "wrap",
+        "text-max-width": "1000"
+      }
+    },
+    {
+      "selector": ":parent",
+      "style": {
+        "text-valign": "top",
+        "text-halign": "center",
+        "background-color": "Gainsboro"
+      }
+    },
+    {
+      "selector": ".eh-handle",
+      "style": {
+        "background-color": "red",
+        "width": 12,
+        "height": 12,
+        "shape": "ellipse",
+        "overlay-opacity": 0,
+        "border-width": 12, 
+        "border-opacity": 0
+      }
+    },
+  
+    {
+      "selector": ".eh-hover",
+      "style": {
+        "background-color": "red"
+      }
+    },
+  
+    {
+      "selector": ".eh-source",
+      "style": {
+        "border-width": 2,
+        "border-color": "red"
+      }
+    },
+  
+    {
+      "selector": ".eh-target",
+      "style": {
+        "border-width": 2,
+        "border-color": "red"
+      }
+    },
+  
+    {
+      "selector": ".eh-preview, .eh-ghost-edge",
+      "style": {
+        "background-color": "red",
+        "line-color": "red",
+        "target-arrow-color": "red",
+        "source-arrow-color": "red"
+      }
+    }
+  ]
