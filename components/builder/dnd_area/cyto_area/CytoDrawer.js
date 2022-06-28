@@ -1,13 +1,32 @@
-import React from 'react'
+// react/next
+import { useEffect, useState } from 'react';
+
+// material ui
 import { Drawer, Box, IconButton, ListSubheader } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+// custom componenets
 import CytoList from './CytoList';
+
+// external libraries
 import Draggable from "react-draggable";
 
-const CytoDrawer = ( {openDrawer, setOpenDrawer} ) => {
+const CytoDrawer = ( {openDrawer, setOpenDrawer, cybound} ) => {
+    const [leftBound, setLeftBound] = useState(0)
+    const [rightBound, setRightBound] = useState(0)
+
+    useEffect(() => {
+        if (cybound !== undefined){
+            setLeftBound(cybound[0])
+            setRightBound(cybound[1])
+        }
+    }, [cybound]);
+
   return (
+    // TODO: Change sidebar to come from right (full screen) when on smaller screens,
+    // as opposed to current blue hovering square 
     <Draggable 
-        bounds={{left: -1250, top: 0, right: 0, bottom: 300}}
+        bounds= {{left: -leftBound, top: 0, right: rightBound, bottom: 250}}
         cancel='.cytolist'
         // handle='strong'
         // bounds='parent'

@@ -56,24 +56,32 @@ const CytoComponent = (  ) => {
 
     // responsiveness
     const isSmallHeight = useMediaQuery({ query: '(max-height: 850px' })
-    const isMobile = useMediaQuery({ maxWidth: 767 })
-    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 })
+    const isMobile = useMediaQuery({ maxWidth: 667 })
+    const isTablet = useMediaQuery({ minWidth: 668, maxWidth: 991 })
     const isMedScreen = useMediaQuery({ minWidth: 992, maxWidth: 1300 })
     // const [width, height] = useWindowSize();
+    const [bound, setBound] = useState([0,0])
+    // TODO: Change sidebar to come from right (full screen) when on smaller screens, use below state
+    const [sidebarType, setSidebarType] = useState('default')
 
+    // change cyto area size depending on screen size
     useEffect(() => {
       let cywidth = ''
       let cyheight = ''
-      // isTabletOrMobile ? cywidth = '500px' : cywidth = '1000px'
-      if (isTablet){
-        cywidth = '800px'
+
+      if (isMobile){
+        cywidth = '400px'
+        setBound([200, 50])
       }
-      else if (isMobile){
-        cywidth = '500px'
+      else if (isTablet){
+        cywidth = '550px'
+        setBound([350, 50])
       }else if (isMedScreen){
-        cywidth = '1000px'
+        cywidth = '900px'
+        setBound([700, 50])
       }else {
-        cywidth = '1300px'
+        cywidth = '1150px'
+        setBound([1000, 50])
       }
       isSmallHeight ? cyheight = '600px' : cyheight = '800px'
       console.log('istable ', isTablet)
@@ -299,7 +307,7 @@ const CytoComponent = (  ) => {
             {/* {rightClickMenu} */}
         </div>
         <div className={styles.flexCytoSidebar}>
-          <CytoDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+          <CytoDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} cybound={bound} />
         </div>  
       </div>
         
