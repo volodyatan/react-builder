@@ -1,10 +1,16 @@
+// react/next
 import React from 'react'
-import DNDArea from './builder/DNDArea'
-import styles from '../styles/Builder.module.css'
-import { Tabs, Tab, Card } from '@mui/material';
 import { useState, useEffect } from 'react';
+import styles from '../styles/Builder.module.css'
 
+// material ui
+import { Tabs, Tab } from '@mui/material';
+
+// custom components
+import DNDArea from './builder/DNDArea'
+import ContextDataView from './builder/context_data/ContextDataView';
 import TemplateModal from './nav/modals/TemplateModal';
+
 
 const Builder = () => {
     const [currentlyDisplayed, setCurrentlyDisplayed] = useState(<DNDArea/>);
@@ -25,7 +31,7 @@ const Builder = () => {
         console.log(' new val' ,newValue);
         setCurrentTab(newValue);
         newValue === 'builder' ? setCurrentlyDisplayed(<DNDArea/>) : '';
-        newValue === 'other' ? setCurrentlyDisplayed(<p>other</p>) : '';
+        newValue === 'context_data' ? setCurrentlyDisplayed(<ContextDataView />) : '';
     }
 
     return (
@@ -33,7 +39,7 @@ const Builder = () => {
             <main className={styles.main}>
                 <Tabs value={currentTab} onChange={handleChange}>
                     <Tab label="Builder" value="builder"/>
-                    <Tab label="Other" value="other" />
+                    <Tab label="Context Data" value="context_data" />
                 </Tabs>
                 {currentlyDisplayed}
                 {/* <div style={dndstyle}>

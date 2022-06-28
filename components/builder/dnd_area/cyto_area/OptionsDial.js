@@ -6,6 +6,8 @@ import { useCyActionContext, useCyUndoRedoActionContext } from '../../../CONTEXT
 
 // material ui
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material'
+// material external library
+import { useSnackbar } from 'notistack';
 
 // material icons
 import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
@@ -15,6 +17,8 @@ import CenterFocusStrongRoundedIcon from '@mui/icons-material/CenterFocusStrongR
 const OptionsDial = ( { saveIcon, changeSaveIcon, saveCy } ) => {
     const cyUndoRedo = useCyUndoRedoActionContext()
     const cyAction = useCyActionContext()
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   return (
     <SpeedDial
@@ -29,9 +33,10 @@ const OptionsDial = ( { saveIcon, changeSaveIcon, saveCy } ) => {
         icon={saveIcon}
         tooltipTitle='Save Cyto'
         onClick={()=> {
-            changeSaveIcon('idle')
+            // changeSaveIcon('idle')
             saveCy()
             changeSaveIcon('saving')
+            enqueueSnackbar('Elements saved locally', {variant: 'success'})
         }}
         />
         <SpeedDialAction

@@ -4,6 +4,9 @@ import React, {useContext, useState, createContext, useEffect} from 'react'
 // installed libaries
 import { v4 as uuid } from 'uuid';
 
+// material external library
+import { useSnackbar } from 'notistack';
+
 const CyContext = createContext()
 const CySetContext = createContext()
 const CySaveLocalStorageContext = createContext()
@@ -76,6 +79,8 @@ export function ElementsProvider({ children }) {
     const [cy, setCy] = useState(null)
     const [undoredo, setUndoredo] = useState(null)
 
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
     // initialize elements in local storage, or load elements from local storage if they exist already 
     useEffect(() => {
         if (cy !== null){
@@ -95,11 +100,21 @@ export function ElementsProvider({ children }) {
 
     const undoRedoAction = (action) => {
         if (action === 'undo') {
-            console.log ('duno?')
-            undoredo.undo()
+
+            if (undoredo.isUndoStackEmpty()){
+                enqueueSnackbar('Nothing to undo!', {variant: 'info'})
+            }else {
+                undoredo.undo()
+            }
+
         }else if (action === 'redo') {
-            console.log('redoooo')
-            undoredo.redo()
+        
+            if (undoredo.isRedoStackEmpty()){
+                enqueueSnackbar('Nothing to redo!', {variant: 'info'})
+            }else{
+                undoredo.redo()
+            }
+
         }
     }
 
