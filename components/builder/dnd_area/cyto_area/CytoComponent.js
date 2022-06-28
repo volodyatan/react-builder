@@ -16,7 +16,7 @@ import CytoDrawer from './CytoDrawer';
 import { useWindowSize } from '../../../HOOKS/useWindowSize';
 
 // material ui
-import { Modal, SpeedDial, Tab, Table } from '@mui/material';
+import { Modal, SpeedDial } from '@mui/material';
 
 // material icons
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
@@ -125,14 +125,6 @@ const CytoComponent = (  ) => {
             return
 
         console.log('cyyy ', cy)
-
-        // turning event listeners off before turning them on so that new identical listeners aren't created every time a re-render happens
-        // cy.off('add remove').on('add remove', () => {
-        //   console.log('CY IS CHANINGGGG')
-        //   let eles = cy.elements().map(ele => ele.data())
-        //   console.log('cy ... ', eles)
-        // })
-        // cy.centre()
     }, [cy]);
 
     useEffect(() => {
@@ -289,14 +281,6 @@ const CytoComponent = (  ) => {
             
 
             <CytoscapeComponent id="cyto" className={styles.cyto}  style={cyStyle} onChange={(c) => console.log('CHANGNING... cy', c)} cy={(newcy) => { 
-                    // newcy.style(cytostyle)
-                    // newcy.centre()
-                    // console.log('cyyy ', newcy)
-                    // // turning event listeners off before turning them on so that new identical listeners aren't created every time a re-render happens
-                    // newcy.off('add remove').on('add remove', () => {
-                    //   console.log('CY IS CHANINGGGG')
-                    //   console.log('cy ... ', cy)
-                    // })
                     setCy(newcy)
                 }} />
               <Modal open={modalOpen} onClose={handleModalClose} onContextMenu={(e)=> e.preventDefault()}>
@@ -304,7 +288,6 @@ const CytoComponent = (  ) => {
                   {modalContent}
                 </div>
               </Modal>
-            {/* {rightClickMenu} */}
         </div>
         <div className={styles.flexCytoSidebar}>
           <CytoDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} cybound={bound} />

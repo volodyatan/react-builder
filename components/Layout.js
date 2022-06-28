@@ -6,16 +6,16 @@ import { TemplateProvider } from './CONTEXT/TemplateProvider'
 const Layout = ( {children} ) => {
     return (
         <>
-            <TemplateProvider>
-                <ElementsProvider>
+            <ElementsProvider>
+                <TemplateProvider>
                     <Nav/>
                     <div className={styles.container}>
                         <main className={styles.main}>
                             {children}
                         </main>
                     </div>
-                </ElementsProvider>
-            </TemplateProvider>
+                </TemplateProvider>
+            </ElementsProvider>
         </>
     )
 }

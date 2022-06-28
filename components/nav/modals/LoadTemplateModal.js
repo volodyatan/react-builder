@@ -1,9 +1,15 @@
-import { Button, MenuItem, Box, Typography, TextField, CircularProgress, Card, CardContent, IconButton } from '@mui/material';
+// react/next
 import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
+// context
+import { useTemplateContext, useTemplateGetAllContext, useTemplateUpdateContext } from '../../CONTEXT/TemplateProvider';
+
+// material ui
+import { Button, MenuItem, Box, Typography, TextField, CircularProgress, Card, CardContent, IconButton } from '@mui/material';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { useTemplateContext, useTemplateGetAllContext, useTemplateSetContext } from '../../CONTEXT/TemplateProvider';
+
+// custom componenets
 import AlertComponent from '../../ALERTS/AlertComponent';
 
 const ReactJson = dynamic(import('react-json-view'), { ssr: false });
@@ -33,17 +39,19 @@ const LoadTemplateModal = ( {close} ) => {
 
     // all retrieved templates from database TODO: make this only retrieve templates that belong to the user
     const [allTemplates, setAllTemplates] = useState([])
-    // stores currently selected template
+    // stores currently selected template (in the dropdown select)
     const [selectedTemplate, setSelectedTemplate] = useState('')
     // stores the json data that is displayed in the modal for the currently selected template
     const [selectedTemplateJsonData, setSelectedTemplateJsonData] = useState(<></>)
     // stores the data for currently selected template that will be saved in the template context
     const [selectedTemplateData, setSelectedTemplateData] = useState('')
 
+    // template context
     const template = useTemplateContext()
-    const setTemplate = useTemplateSetContext()
+    const updateTemplate = useTemplateUpdateContext()
     const getAllTemplates = useTemplateGetAllContext()
 
+    // if database cannot be reached, show error
     useEffect(() => {
         try{
             const fetchTemplates = async () => {
@@ -55,7 +63,6 @@ const LoadTemplateModal = ( {close} ) => {
                     setErrorMessage("Templates could not be fetched, please try again.")
                     throw "Templates could not be fetched"
                 }
-                // if templates
             }
             setIsLoading(true)
             fetchTemplates().catch(console.error)
@@ -64,6 +71,7 @@ const LoadTemplateModal = ( {close} ) => {
         }
     }, [displayError]);
 
+    // get all templates from database
     useEffect(() => {
         console.log('all temps ', allTemplates)
         if (allTemplates !== {}){
@@ -71,6 +79,7 @@ const LoadTemplateModal = ( {close} ) => {
         }
     }, [allTemplates]);
 
+    // update selected template display json for the selected template
     useEffect(() => {
         console.log('selected temp ', selectedTemplate)
         if (selectedTemplate !== '') {
@@ -97,12 +106,12 @@ const LoadTemplateModal = ( {close} ) => {
     <Box sx={boxStyle}
         component='form'
         autoComplete='off'
-        onSubmit={(e) => {
-            e.preventDefault()
-            console.log(' eeeee ', selectedTemplate)
-            setTemplate(selectedTemplateData)
-            close()
-        }}
+        // onSubmit={(e) => {
+        //     e.preventDefault()
+        //     console.log(' eeeee ', selectedTemplate)
+        //     updateTemplate(selectedTemplateData)
+        //     close()
+        // }}
         >
             <IconButton onClick={()=> close()} sx={{position:'absolute', right:'2px', top:'2px'}}>
                     <CloseRoundedIcon />
@@ -121,7 +130,11 @@ const LoadTemplateModal = ( {close} ) => {
                     </TextField>
                     {selectedTemplateJsonData}
                     <br/>
-                    <Button variant='outlined' type='submit'>
+                    {/* <Button variant='outlined' type='submit'> */}
+                    <Button variant='outlined' onClick={() => {
+                        updateTemplate(selectedTemplateData)
+                        close()
+                    }}>
                             Select Template
                     </Button><br/><br/>
                     <Button variant='outlined' color='warning' onClick={()=> close()}>

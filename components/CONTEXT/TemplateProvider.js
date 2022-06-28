@@ -1,8 +1,11 @@
-import { v4 as uuid } from 'uuid';
+// react/next
 import React, {useContext, useState, createContext, useEffect} from 'react'
 
+// context
+import { useCySaveLocalStorageContext, useCySetNewCyContext } from './ElementsProvider'
+
 const TemplateContext = createContext()
-const TemplateSetContext = createContext()
+const TemplateUpdateContext = createContext()
 const TemplateGetAllContext = createContext()
 
 const setDefault = (setTemplate) => {
@@ -17,8 +20,8 @@ export function useTemplateContext() {
     return useContext(TemplateContext)
 }
 
-export function useTemplateSetContext() {
-    return useContext(TemplateSetContext)
+export function useTemplateUpdateContext() {
+    return useContext(TemplateUpdateContext)
 }
 
 export function useTemplateGetAllContext() {
@@ -28,6 +31,10 @@ export function useTemplateGetAllContext() {
 // creating context and custom hook to deal with elements in multiple components
 export function TemplateProvider({ children }) {
     const [template, setTemplate] = useState()
+    const [contextData, setContextData] = useState()
+
+    const setCy = useCySetNewCyContext()
+    const saveCy = useCySaveLocalStorageContext()
 
     // initialize elements in local storage, or load elements from local storage if they exist already 
     useEffect(() => {
@@ -45,13 +52,21 @@ export function TemplateProvider({ children }) {
         return jsondata.data 
     }
 
+    const updateTemplate = (newTemplate) => {
+        setTemplate(newTemplate)
+        let extraData = newTemplate.extraData
+        let builderData = JSON.parse(extraData.builder)
+        setCy(builderData)
+        saveCy()
+    }
+
     return (
         <TemplateContext.Provider value={template}>
-            <TemplateSetContext.Provider value={setTemplate}>
+            <TemplateUpdateContext.Provider value={updateTemplate}>
                 <TemplateGetAllContext.Provider value={getAllTemplates}>
                     {children}
                 </TemplateGetAllContext.Provider>
-            </TemplateSetContext.Provider>
+            </TemplateUpdateContext.Provider>
         </TemplateContext.Provider>
     )
 }

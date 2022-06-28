@@ -10,6 +10,7 @@ const CySaveLocalStorageContext = createContext()
 const CySetUndoRedoContext = createContext()
 const CyUndoRedoActionContext = createContext()
 const CyActionContext = createContext()
+const CySetNewCyContext = createContext()
 
 const ElementsAddNodeContext = createContext()
 const ElementsDeleteNodeContext = createContext()
@@ -48,6 +49,10 @@ export function useCyUndoRedoActionContext() {
 // for misc cytoscape actions
 export function useCyActionContext() {
     return useContext(CyActionContext)
+}
+// to set all elements
+export function useCySetNewCyContext() {
+    return useContext(CySetNewCyContext)
 }
 
 // use this hook to add nodes
@@ -133,24 +138,33 @@ export function ElementsProvider({ children }) {
         undoredo.do('add', tran)
     }
 
+    const setNewCy = (newElements) => {
+
+        cy.json({elements:newElements})
+        cyAction('re-center')
+        
+    }
+
     return (
         <CyContext.Provider value={cy}>
             <CySetContext.Provider value={setCy}>
-                <CySaveLocalStorageContext.Provider value={saveCyLocalStorage}>
-                    <CySetUndoRedoContext.Provider value={setUndoredo}>
-                        <CyUndoRedoActionContext.Provider value={undoRedoAction}>
-                            <CyActionContext.Provider value={cyAction}>
-                                <ElementsAddNodeContext.Provider value ={addNode}>
-                                    <ElementsDeleteNodeContext.Provider value={deleteNode}>
-                                        <ElementsAddTransitionContext.Provider value={addTransition}>
-                                            {children}
-                                        </ElementsAddTransitionContext.Provider>
-                                    </ElementsDeleteNodeContext.Provider>
-                                </ElementsAddNodeContext.Provider>
-                            </CyActionContext.Provider>
-                        </CyUndoRedoActionContext.Provider>
-                    </CySetUndoRedoContext.Provider>
-                </CySaveLocalStorageContext.Provider>
+                <CySetNewCyContext.Provider value={setNewCy}>
+                    <CySaveLocalStorageContext.Provider value={saveCyLocalStorage}>
+                        <CySetUndoRedoContext.Provider value={setUndoredo}>
+                            <CyUndoRedoActionContext.Provider value={undoRedoAction}>
+                                <CyActionContext.Provider value={cyAction}>
+                                    <ElementsAddNodeContext.Provider value ={addNode}>
+                                        <ElementsDeleteNodeContext.Provider value={deleteNode}>
+                                            <ElementsAddTransitionContext.Provider value={addTransition}>
+                                                {children}
+                                            </ElementsAddTransitionContext.Provider>
+                                        </ElementsDeleteNodeContext.Provider>
+                                    </ElementsAddNodeContext.Provider>
+                                </CyActionContext.Provider>
+                            </CyUndoRedoActionContext.Provider>
+                        </CySetUndoRedoContext.Provider>
+                    </CySaveLocalStorageContext.Provider>
+                </CySetNewCyContext.Provider>
             </CySetContext.Provider>
         </CyContext.Provider>
         

@@ -1,6 +1,10 @@
+// react/next
 import React, {useState, useEffect} from 'react'
+
+// material ui 
 import { Button, ButtonGroup, Modal, Box, Typography } from '@mui/material';
 
+// custom components
 import LoadTemplateModal from './LoadTemplateModal';
 import SaveTemplateModal from './SaveTemplateModal';
 
@@ -25,7 +29,7 @@ const TemplateModal = ( {modalMode, setModalMode} ) => {
     }
 
     return (
-        <Modal  open={modalOpen} onClose={handleModalClose}>
+        <Modal sx={{transition: 'left 2s',}} open={modalOpen} onClose={handleModalClose}>
             <div>
             {modalContent}
             </div>
