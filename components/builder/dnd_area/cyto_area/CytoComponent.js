@@ -12,8 +12,11 @@ import AddTransitionModal from '../modals/AddTransitionModal';
 import OptionsDial from './OptionsDial';
 import CytoDrawer from './CytoDrawer';
 
+// custom hooks
+import { useWindowSize } from '../../../HOOKS/useWindowSize';
+
 // material ui
-import { Modal, SpeedDial } from '@mui/material';
+import { Modal, SpeedDial, Tab, Table } from '@mui/material';
 
 // material icons
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
@@ -29,6 +32,7 @@ import undoRedo from "cytoscape-undo-redo";
 
 // installed components
 import { Checkmark } from 'react-checkmark'
+import { useMediaQuery } from 'react-responsive'
 
 Cytoscape.use(cxtmenu)
 Cytoscape.use(undoRedo)
@@ -49,6 +53,35 @@ const CytoComponent = (  ) => {
     const [modalContent, setModalContent] = useState(<></>)
 
     const [openDrawer, setOpenDrawer] = useState(false)
+
+    // responsiveness
+    const isSmallHeight = useMediaQuery({ query: '(max-height: 850px' })
+    const isMobile = useMediaQuery({ maxWidth: 767 })
+    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 })
+    const isMedScreen = useMediaQuery({ minWidth: 992, maxWidth: 1300 })
+    // const [width, height] = useWindowSize();
+
+    useEffect(() => {
+      let cywidth = ''
+      let cyheight = ''
+      // isTabletOrMobile ? cywidth = '500px' : cywidth = '1000px'
+      if (isTablet){
+        cywidth = '800px'
+      }
+      else if (isMobile){
+        cywidth = '500px'
+      }else if (isMedScreen){
+        cywidth = '1000px'
+      }else {
+        cywidth = '1300px'
+      }
+      isSmallHeight ? cyheight = '600px' : cyheight = '800px'
+      console.log('istable ', isTablet)
+      console.log('issmall ', isSmallHeight)
+      console.log(' width ', cywidth)
+      console.log(' height ', cyheight)
+      setCyStyle({ width: cywidth, height: cyheight })
+    }, [isTablet, isMobile, isMedScreen, isSmallHeight]);
 
     // this controls the icon in the speed dial, shows checkmark when pressed
     // use changeSaveIcon to change icon from saving to idle
@@ -245,7 +278,8 @@ const CytoComponent = (  ) => {
               icon={<ChevronLeftIcon />}
               onClick={()=> setOpenDrawer(true)}
             />
-            {/* TODO: on node drop, update local storage position of node */}
+            
+
             <CytoscapeComponent id="cyto" className={styles.cyto}  style={cyStyle} onChange={(c) => console.log('CHANGNING... cy', c)} cy={(newcy) => { 
                     // newcy.style(cytostyle)
                     // newcy.centre()

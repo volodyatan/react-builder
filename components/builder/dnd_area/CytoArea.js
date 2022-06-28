@@ -1,6 +1,8 @@
+// react/next
 import dynamic from 'next/dynamic';
-
 import { useState } from 'react';
+
+// material ui
 import { Box } from '@mui/material';
 
 const CytoComponent = dynamic(() => import('./cyto_area/CytoComponent'), {
@@ -19,7 +21,7 @@ const CytoArea = ( ) => {
           height: 'auto',
           backgroundColor: '#DCDCDC',
           '&:hover': {
-            backgroundColor: 'white',
+            backgroundColor: 'grey',
             // opacity: [0.9, 0.8, 0.7], 
           },
         }}>

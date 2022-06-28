@@ -117,8 +117,6 @@ export function ElementsProvider({ children }) {
         undoredo.do('add', ele)
     }
 
-    // TODO: keep removed elements in limbo to add back later (eg. undo function)
-    // OR can use stack to keep track of entire states of builder and restore previous states
     const deleteNode = (elementId) => {
 
         // find nodes to delete using cy selector
