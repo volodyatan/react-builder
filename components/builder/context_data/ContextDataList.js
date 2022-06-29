@@ -15,7 +15,7 @@ const ContextDataList = ( { setActive } ) => {
         let list = options.map((item, idx) => {
             return (
             <MenuItem key={idx} sx={{}} onClick={()=>{
-                // toggleSidebar()
+                
                 setActive(item.component)
             }}>
                 <ListItemIcon>
@@ -27,7 +27,9 @@ const ContextDataList = ( { setActive } ) => {
             </MenuItem>
             )
         })
-        return list
+        return  <MenuList>
+                    {list}
+                </MenuList> 
     }
 
   return (
@@ -38,17 +40,11 @@ const ContextDataList = ( { setActive } ) => {
           Data Types
         </ListSubheader>
         <Divider />
-        <MenuList>
-            {renderList(textOptions)}
-        </MenuList>
+        {renderList(textOptions)}
         <Divider />
-        <MenuList>
-            {renderList(mediaOptions)}
-        </MenuList>
+        {renderList(mediaOptions)}
         <Divider />
-        <MenuList>
-            {renderList(multiOptions)}
-        </MenuList>
+        {renderList(multiOptions)}
       </Box>
   )
 }

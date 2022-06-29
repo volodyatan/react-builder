@@ -25,8 +25,19 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import SmartButtonRoundedIcon from '@mui/icons-material/SmartButtonRounded';
 
 // COMPONENTS
-//text components
-import ViewTitle from './ContextDataViews.js/ViewTitle';
+// text components
+import ViewShortText from './ContextDataViews/ViewShortText'
+import ViewLongText from './ContextDataViews/ViewLongText'
+import ViewTitle from './ContextDataViews/ViewTitle';
+import ViewHeader from './ContextDataViews/ViewHeader'
+// media components
+import ViewImage from './ContextDataViews/ViewImage'
+import ViewVideo from './ContextDataViews/ViewVideo'
+// other components
+import ViewMenu from './ContextDataViews/ViewMenu'
+import ViewInput from './ContextDataViews/ViewInput'
+import ViewList from './ContextDataViews/ViewList'
+import ViewButton from './ContextDataViews/ViewButton';
 
 // change icon style if needed
 const iconStyle = {
@@ -37,12 +48,12 @@ export const textOptions = [
     {
         title: "Short text",
         icon: <ShortTextRoundedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewShortText />
     },
     {
         title: "Long text",
         icon: <MenuBookRoundedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewMenu />
     },
     {
         title: "Title",
@@ -52,7 +63,7 @@ export const textOptions = [
     {
         title: "Header",
         icon: <AbcRoundedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewHeader />
     }
 ]
 
@@ -60,12 +71,12 @@ export const mediaOptions = [
     {
         title: "Image",
         icon: <ImageRoundedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewImage />
     },
     {
         title: "Video",
         icon: <OndemandVideoRoundedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewVideo />
     }
 ]
 
@@ -73,21 +84,21 @@ export const multiOptions = [
     {
         title: "Menu",
         icon: <MenuIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewMenu />
     },
     {
         title: "Input",
         icon: <InputRoundedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewInput />
     },
     {
         title: "List",
         icon: <FormatListBulletedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewList />
     },
     {
         title: "Button",
         icon: <SmartButtonRoundedIcon sx={iconStyle}/>,
-        component: <></>
+        component: <ViewButton />
     },
 ]
