@@ -3,12 +3,6 @@ import React from 'react'
 // ICONS
 // short text icon
 import ShortTextRoundedIcon from '@mui/icons-material/ShortTextRounded';
-// long text icon
-import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
-// title icon
-import TitleRoundedIcon from '@mui/icons-material/TitleRounded';
-// header icon
-import AbcRoundedIcon from '@mui/icons-material/AbcRounded';
 
 //image icon
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
@@ -26,10 +20,7 @@ import SmartButtonRoundedIcon from '@mui/icons-material/SmartButtonRounded';
 
 // COMPONENTS
 // text components
-import ViewShortText from './ContextDataViews/ViewShortText'
-import ViewLongText from './ContextDataViews/ViewLongText'
-import ViewTitle from './ContextDataViews/ViewTitle';
-import ViewHeader from './ContextDataViews/ViewHeader'
+import ViewText from './ContextDataViews/ViewText'
 // media components
 import ViewImage from './ContextDataViews/ViewImage'
 import ViewVideo from './ContextDataViews/ViewVideo'
@@ -46,24 +37,9 @@ const iconStyle = {
 
 export const textOptions = [
     {
-        title: "Short text",
+        title: "Text",
         icon: <ShortTextRoundedIcon sx={iconStyle}/>,
-        component: <ViewShortText />
-    },
-    {
-        title: "Long text",
-        icon: <MenuBookRoundedIcon sx={iconStyle}/>,
-        component: <ViewMenu />
-    },
-    {
-        title: "Title",
-        icon: <TitleRoundedIcon sx={iconStyle}/>,
-        component: <ViewTitle />
-    },
-    {
-        title: "Header",
-        icon: <AbcRoundedIcon sx={iconStyle}/>,
-        component: <ViewHeader />
+        component: <ViewText />
     }
 ]
 
