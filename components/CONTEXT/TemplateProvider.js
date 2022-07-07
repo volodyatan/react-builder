@@ -7,6 +7,7 @@ import { useCySaveLocalStorageContext, useCySetNewCyContext } from './ElementsPr
 const TemplateContext = createContext()
 const TemplateUpdateContext = createContext()
 const TemplateGetAllContext = createContext()
+const TemplateGetContextContext = createContext()
 
 const setDefault = (setTemplate) => {
     if(localStorage.getItem('template') === null){
@@ -26,6 +27,10 @@ export function useTemplateUpdateContext() {
 
 export function useTemplateGetAllContext() {
     return useContext(TemplateGetAllContext)
+}
+
+export function useTemplateGetContextContext() {
+    return useContext(TemplateGetContextContext)
 }
 
 // creating context and custom hook to deal with elements in multiple components
@@ -60,11 +65,20 @@ export function TemplateProvider({ children }) {
         saveCy()
     }
 
+    const getTemplateContext = (ctx) => {
+        let language = navigator.language || navigator.userLanguage
+        let locale = 'en-CA'
+        // TODO: implement different locales, default to en-CA (or whatever)
+        return JSON.parse(template.extraData.context)[locale][ctx]
+    }
+
     return (
         <TemplateContext.Provider value={template}>
             <TemplateUpdateContext.Provider value={updateTemplate}>
                 <TemplateGetAllContext.Provider value={getAllTemplates}>
-                    {children}
+                    <TemplateGetContextContext.Provider value={getTemplateContext}>
+                        {children}
+                    </TemplateGetContextContext.Provider>
                 </TemplateGetAllContext.Provider>
             </TemplateUpdateContext.Provider>
         </TemplateContext.Provider>
