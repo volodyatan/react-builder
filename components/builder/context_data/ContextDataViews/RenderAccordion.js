@@ -10,7 +10,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // custom components
 import TextRender from '../../../RENDERS/TextRender';
-import MenuRender from '../../../RENDERS/MenuRender';
+import MenuRender from '../../../RENDERS/menu_render/MenuRender';
+import ButtonRender from '../../../RENDERS/button_render/ButtonRender';
+import ImageRender from '../../../RENDERS/image_render/ImageRender';
+
+// hooks
 
 const RenderAccordion = ( { type, contextData } ) => {
 
@@ -28,30 +32,68 @@ const RenderAccordion = ( { type, contextData } ) => {
         let name = ''
         let content = <></>
         if (type === 'text'){
-            name = field.text
-            content =   Object.keys(field).map( (key) => {
-                            return  <Box key={JSON.stringify(field[key])+name+summaryId}>
-                                        <Divider>
-                                            <Chip label={key.toUpperCase()}/>
-                                        </Divider>
-                                        <TextRender text={field[key]} variant={field.variant} />
-                                    </Box>
-                        })
+          name = field.text
+          content =   Object.keys(field).map( (key) => {
+                          return  <Box key={JSON.stringify(field[key])+name+summaryId}>
+                                      <Divider>
+                                          <Chip label={key.toUpperCase()}/>
+                                      </Divider>
+                                      <TextRender text={field[key]} variant={field.variant} />
+                                  </Box>
+                      })
         }else if (type === 'menu'){
-            name = field.name
-            content =   Object.keys(field).map( (key) => {
-                            return  <Box key={JSON.stringify(field[key])+name+summaryId}>
-                                        <Divider>
-                                            <Chip label={key.toUpperCase()}/>
-                                        </Divider>
-                                        {key !== 'menu_items' &&
-                                            <TextRender text={field[key]} variant='body1' />
-                                        }
-                                        {key === 'menu_items' && 
-                                            <MenuRender menuItems={JSON.stringify(field[key])} />
-                                        }
-                                    </Box>
-                        })
+          name = field.name
+          content =   Object.keys(field).map( (key) => {
+                          return  <Box key={JSON.stringify(field[key])+name+summaryId}>
+                                      <Divider>
+                                          <Chip label={key.toUpperCase()}/>
+                                      </Divider>
+                                      {key !== 'menu_items' &&
+                                          <TextRender text={field[key]} variant='body1' />
+                                      }
+                                      {key === 'menu_items' && 
+                                          <MenuRender menuItems={field[key]} />
+                                      }
+                                  </Box>
+                      })
+        }else if (type === 'button'){
+          name = field.text
+          content =   Object.keys(field).map( (key) => {
+                          return  <Box key={JSON.stringify(field[key])+name+summaryId}>
+                                      <Divider>
+                                          <Chip label={key.toUpperCase()}/>
+                                      </Divider>
+                                      <TextRender text={field[key]} variant='body1' />
+                                  </Box>
+                      })
+          // adding preview of button
+          content.push(
+            <Box key={JSON.stringify(field)+'preview'}>
+                <Divider>
+                    <Chip label='Button preview'/>
+                </Divider>
+                <ButtonRender button={field} />
+            </Box>
+          )
+        }else if(type === 'image'){
+          name = field.alt_text
+          content =   Object.keys(field).map( (key) => {
+                        return  <Box key={JSON.stringify(field[key])+name+summaryId}>
+                                    <Divider>
+                                        <Chip label={key.toUpperCase()}/>
+                                    </Divider>
+                                    <TextRender text={field[key]} variant='body1' />
+                                </Box>
+                      })
+          // adding preview of image
+          content.push(
+            <Box key={JSON.stringify(field)+'preview'}>
+                <Divider>
+                    <Chip label='Image preview'/>
+                </Divider>
+                <ImageRender image={field} />
+            </Box>
+          )
         }
 
         accordionBuilder.push(
@@ -83,7 +125,12 @@ const RenderAccordion = ( { type, contextData } ) => {
 
 
     return (
-        <Box>
+        <Box sx={{
+          // overflow: 'scroll',
+          width: 'auto',
+          overflowY: 'auto',
+          maxHeight: '830px'
+        }}>
             {accordion}
         </Box>
     )

@@ -24,11 +24,7 @@ const ViewText = ( ) => {
     }, []);
 
   return (
-    <Box sx={{
-        width: 'auto',
-        overflowY: 'scroll',
-        maxHeight: '850px'
-      }}>
+    <Box>
         <Typography variant='button'>text</Typography>
         <RenderAccordion type='text' contextData={textContext} />
     </Box>

@@ -1,22 +1,34 @@
 // react
-import React from 'react'
+import { useEffect, useState } from 'react'
 
 // material ui
-import { Divider, ListItemIcon, ListItemText, ListSubheader, MenuList, MenuItem } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
-// custom componenets
+// icons
+
+// context
+import { useTemplateGetContextContext } from '../../../CONTEXT/TemplateProvider';
+
+// custom components
+import RenderAccordion from './RenderAccordion';
 
 // TODO: work on this component
 const ViewButton = ( ) => {
 
-    
+  const getContext = useTemplateGetContextContext()
+  const [buttonContext, setButtonContext] = useState()
+
+  useEffect(() => {
+    setButtonContext(getContext('button'))
+  }, []);
 
   return (
     <Box sx={{
         width: 'auto'
       }}>
-        <p>button</p>
+        <Typography variant='button'>Buttons</Typography>
+        <RenderAccordion type='button' contextData={buttonContext} />
     </Box>
   )
 }

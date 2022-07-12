@@ -6,7 +6,6 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 // icons
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // context
 import { useTemplateGetContextContext } from '../../../CONTEXT/TemplateProvider';
@@ -28,7 +27,7 @@ return (
   <Box sx={{
       width: 'auto'
     }}>
-      <Typography variant='button'>Headers</Typography>
+      <Typography variant='button'>Menus</Typography>
       <RenderAccordion type='menu' contextData={menuContext} />
   </Box>
 )
