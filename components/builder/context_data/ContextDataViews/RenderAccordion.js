@@ -94,6 +94,16 @@ const RenderAccordion = ( { type, contextData } ) => {
                 <ImageRender image={field} />
             </Box>
           )
+        }else if(type === 'list'){
+          name = field.name
+          content =   Object.keys(field).map( (key) => {
+            return  <Box key={JSON.stringify(field[key])+name+summaryId}>
+                        <Divider>
+                            <Chip label={key.toUpperCase()}/>
+                        </Divider>
+                        <TextRender text={field[key]} variant='body1' />
+                    </Box>
+          })
         }
 
         accordionBuilder.push(

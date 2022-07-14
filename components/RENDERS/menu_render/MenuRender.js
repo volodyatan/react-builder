@@ -51,7 +51,7 @@ const MenuRender = ( { menuItems } ) => {
         // build renderMenuItems
         for (let item of menuItems){
           if (item.type == 'divider'){
-            allItems.push(<Divider/>)
+            allItems.push(<Divider key={JSON.stringify(item)} />)
           }else if (item.type == 'link'){
             let SelectedIcon = <></>
             try {
@@ -60,7 +60,7 @@ const MenuRender = ( { menuItems } ) => {
               console.log(`"${item.icon}" ICON NOT FOUND`)
             }
             allItems.push(
-              <MenuItemLink item={item} />
+              <MenuItemLink key={JSON.stringify(item)} item={item} />
             )
           // TODO: change submenu to use popover https://github.com/jcoreio/material-ui-popup-state
           }else if( item.type == 'submenu'){
@@ -69,7 +69,7 @@ const MenuRender = ( { menuItems } ) => {
               return prev
             })
             allItems.push(
-              <MenuItemSubmenu item={item} />
+              <MenuItemSubmenu key={JSON.stringify(item)} item={item} />
             )
           } 
         }

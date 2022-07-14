@@ -13,7 +13,6 @@ import { useTemplateGetContextContext } from '../../../CONTEXT/TemplateProvider'
 // custom components
 import RenderAccordion from './RenderAccordion';
 
-// TODO: work on this component
 const ViewMenu = ( ) => {
 
   const getContext = useTemplateGetContextContext()
