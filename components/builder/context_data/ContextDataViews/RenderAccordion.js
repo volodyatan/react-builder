@@ -13,6 +13,7 @@ import TextRender from '../../../RENDERS/TextRender';
 import MenuRender from '../../../RENDERS/menu_render/MenuRender';
 import ButtonRender from '../../../RENDERS/button_render/ButtonRender';
 import ImageRender from '../../../RENDERS/image_render/ImageRender';
+import InputRender from '../../../RENDERS/input_render/InputRender';
 
 // hooks
 
@@ -104,6 +105,25 @@ const RenderAccordion = ( { type, contextData } ) => {
                         <TextRender text={field[key]} variant='body1' />
                     </Box>
           })
+        }else if(type === 'input'){
+          name = field.name
+          content =   Object.keys(field).map( (key) => {
+            return  <Box key={JSON.stringify(field[key])+name+summaryId}>
+                        <Divider>
+                            <Chip label={key.toUpperCase()}/>
+                        </Divider>
+                        <TextRender text={field[key]} variant='body1' />
+                    </Box>
+            })
+          // adding preview of image
+          content.push(
+            <Box key={JSON.stringify(field)+'preview'}>
+                <Divider>
+                    <Chip label='Image preview'/>
+                </Divider>
+                <InputRender image={field} />
+            </Box>
+          )
         }
 
         accordionBuilder.push(

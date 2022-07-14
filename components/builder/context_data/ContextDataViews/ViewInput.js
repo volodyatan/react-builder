@@ -10,13 +10,19 @@ import { Box } from '@mui/system';
 // TODO: work on this component
 const ViewInput = ( ) => {
 
-    
+  const getContext = useTemplateGetContextContext()
+  const [inputContext, setInputContext] = useState()
+
+  useEffect(() => {
+    setInputContext(getContext('input'))
+  }, []);
 
   return (
     <Box sx={{
         width: 'auto'
       }}>
-        <p>input</p>
+        <Typography variant='button'>Inputs</Typography>
+        <RenderAccordion type='input' contextData={inputContext} />
     </Box>
   )
 }
