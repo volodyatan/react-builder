@@ -20,24 +20,10 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 
 // custom components
-import MenuItemSubmenu from './MenuItemSubmenu';
-import MenuItemLink from './MenuItemLink';
+// import MenuItemSubmenu from './MenuItemSubmenu';
+// import MenuItemLink from './MenuItemLink';
 
 // variants: 	
-//   'body1'
-// | 'body2'
-// | 'button'
-// | 'caption'
-// | 'h1'
-// | 'h2'
-// | 'h3'
-// | 'h4'
-// | 'h5'
-// | 'h6'
-// | 'inherit'
-// | 'overline'
-// | 'subtitle1'
-// | 'subtitle2'
 // https://mui.com/material-ui/api/typography/
 
 const InputRender = ( { menuItems } ) => {

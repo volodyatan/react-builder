@@ -112,18 +112,23 @@ const RenderAccordion = ( { type, contextData } ) => {
                         <Divider>
                             <Chip label={key.toUpperCase()}/>
                         </Divider>
-                        <TextRender text={field[key]} variant='body1' />
+                        {key !== 'inputs' &&
+                            <TextRender text={field[key]} variant='body1' />
+                        }
+                        {key === 'inputs' && 
+                            <TextRender text={JSON.stringify(field[key])} variant='body1' />
+                        }
                     </Box>
             })
-          // adding preview of image
-          content.push(
-            <Box key={JSON.stringify(field)+'preview'}>
-                <Divider>
-                    <Chip label='Image preview'/>
-                </Divider>
-                <InputRender image={field} />
-            </Box>
-          )
+          // // adding preview of input
+          // content.push(
+          //   <Box key={JSON.stringify(field)+'preview'}>
+          //       <Divider>
+          //           <Chip label='Image preview'/>
+          //       </Divider>
+          //       <InputRender image={field} />
+          //   </Box>
+          // )
         }
 
         accordionBuilder.push(
