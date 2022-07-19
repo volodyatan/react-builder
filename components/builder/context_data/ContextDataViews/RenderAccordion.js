@@ -120,16 +120,17 @@ const RenderAccordion = ( { type, contextData } ) => {
                         }
                     </Box>
             })
-          // // adding preview of input
-          // content.push(
-          //   <Box key={JSON.stringify(field)+'preview'}>
-          //       <Divider>
-          //           <Chip label='Image preview'/>
-          //       </Divider>
-          //       <InputRender image={field} />
-          //   </Box>
-          // )
+          // adding preview of input
+          content.push(
+            <Box key={JSON.stringify(field)+'preview'}>
+                <Divider>
+                    <Chip label='Input preview'/>
+                </Divider>
+                <InputRender inputs={field} />
+            </Box>
+          )
         }
+
 
         accordionBuilder.push(
           <Accordion key={JSON.stringify(field)+summaryId} expanded={activeAccordion === ctx} onChange={() => {
