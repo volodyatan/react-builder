@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 
 // material ui
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography, Divider, Chip } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, Divider, Chip } from '@mui/material';
 import { Box } from '@mui/system';
 
 // icons
@@ -115,17 +115,14 @@ const RenderAccordion = ( { type, contextData } ) => {
                         {key !== 'inputs' &&
                             <TextRender text={field[key]} variant='body1' />
                         }
-                        {key === 'inputs' && 
+                        {/* {key === 'inputs' && 
                             <TextRender text={JSON.stringify(field[key])} variant='body1' />
-                        }
+                        } */}
                     </Box>
             })
           // adding preview of input
           content.push(
             <Box key={JSON.stringify(field)+'preview'}>
-                <Divider>
-                    <Chip label='Input preview'/>
-                </Divider>
                 <InputRender inputs={field} />
             </Box>
           )

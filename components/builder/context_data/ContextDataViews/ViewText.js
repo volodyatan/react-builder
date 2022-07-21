@@ -2,16 +2,13 @@
 import { useEffect, useState } from 'react'
 
 // material ui
-import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-
-// icons
 
 // context
 import { useTemplateGetContextContext } from '../../../CONTEXT/TemplateProvider';
 
 // custom componenets
-import RenderAccordion from './RenderAccordion';
+import ContextBody from './ContextBody';
 
 // TODO: work on this component
 const ViewText = ( ) => {
@@ -25,8 +22,7 @@ const ViewText = ( ) => {
 
   return (
     <Box>
-        <Typography variant='button'>text</Typography>
-        <RenderAccordion type='text' contextData={textContext} />
+        <ContextBody type='text' context={textContext} />
     </Box>
   )
 }
