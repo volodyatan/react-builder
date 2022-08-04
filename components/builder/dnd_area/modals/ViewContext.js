@@ -8,7 +8,10 @@ import { Button, Box, Typography, TextField, IconButton, Grid, Divider } from '@
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 // context
-import { useTemplateGetStateContext } from '../../../CONTEXT/TemplateProvider';
+import { useTemplateGetStateContext, useTemplateGetContextData } from '../../../CONTEXT/TemplateProvider';
+
+// custom components
+import RenderItem from '../../../RENDERS/RenderItem';
 
 const ViewContext = ( { state } ) => {
 
@@ -16,6 +19,7 @@ const ViewContext = ( { state } ) => {
     const [contextDisplay, setContextDisplay] = useState(<></>)
 
     const getContext = useTemplateGetStateContext()
+    const getContextData = useTemplateGetContextData()
 
     useEffect(() => {
         setCurrentContext(getContext(state))
@@ -23,40 +27,55 @@ const ViewContext = ( { state } ) => {
     }, []);
 
     useEffect(() => {
-        if (currentContext !== null){
-            let displays = currentContext.map(data =>{
-                let ctx_type = ''
-                let ctx_num = ''
-                for (let d in data){
-                    ctx_type = d
-                    ctx_num = data[d]
-                }
-                return  <Grid container>
-                            <Grid item xs>
+        if (currentContext === null){
+            return
+        }
+
+        let displays = currentContext.map(data =>{
+            let ctx_type = ''
+            let ctx_num = ''
+            for (let d in data){
+                ctx_type = d
+                ctx_num = data[d]
+            }
+
+            let ctx_data = getContextData(ctx_type, ctx_num)
+
+            return  <Box sx={{ borderStyle:'solid', borderWidth:'thin', marginBottom:'15px', padding:'5px'}}>
+                        <Grid container rowSpacing={0} columnSpacing={1}>
+                            <Grid item xs={3}>
                                 {ctx_type}
                             </Grid>
 
                             <Divider orientation="vertical" flexItem />
 
-                            <Grid item xs>
+                            <Grid item xs={2}>
                                 {ctx_num}
                             </Grid>
 
                             <Divider orientation="vertical" flexItem />
 
-                            <Grid item xs>
-                                {JSON.stringify(data)}
+                            <Grid item xs={6}>
+                                <RenderItem type={ctx_type} num={ctx_num} data={ctx_data} />
                             </Grid>
                         </Grid>
-            })
+                    </Box>
+        })
 
-            setContextDisplay(<Box>{displays}</Box>)
-        }
+        setContextDisplay(<Box>{displays}</Box>)
     }, [currentContext]);
 
     return (
         <Box><br/>
             {contextDisplay}
+            
+            <Button variant='outlined' 
+                onClick={() => {
+                    
+                }}
+            > 
+                Add display data to state
+            </Button>
         </Box>
     )
 }

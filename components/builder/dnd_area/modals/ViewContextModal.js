@@ -29,6 +29,16 @@ const boxStyle = {
 
 const ViewContextModal = ( {close, source} ) => {
 
+  const [renderView, setRenderView] = useState(<ViewContext state={source} />)
+
+  const changeView = () => {
+    
+  }
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
     <Box sx={boxStyle} 
       component='form' 
@@ -43,7 +53,7 @@ const ViewContextModal = ( {close, source} ) => {
         </IconButton>
         <Typography><b>"{source}"</b> state context</Typography>
         
-        <ViewContext state={source} />
+        {renderView}
 
         {/* <Button type='submit'>Add Node</Button> */}
 
