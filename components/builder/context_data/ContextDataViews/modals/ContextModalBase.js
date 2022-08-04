@@ -25,6 +25,7 @@ const ContextModalBase = ( {modalMode, modalOpen, setModalOpen} ) => {
     }
 
     return (
+
         <Modal open={modalOpen} onClose={handleModalClose}>
             <Box sx={boxStyle} >
                 {modalContent}

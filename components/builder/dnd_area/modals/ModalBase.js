@@ -1,8 +1,13 @@
+// react/nextjs
 import React, {useState, useEffect} from 'react'
-import { Modal } from '@mui/material';
 
+// material ui
+import { Button, ButtonGroup, Modal, Box, Typography } from '@mui/material';
+
+// custom  components
 import AddNodeModal from './AddNodeModal';
 import AddTransitionModal from './AddTransitionModal';
+import ViewContextModal from './ViewContextModal';
 
 const ModalBase = ( {modalMode, setModalMode} ) => {
 
@@ -14,6 +19,8 @@ const ModalBase = ( {modalMode, setModalMode} ) => {
             setModalContent(<AddNodeModal close={handleModalClose}/>)
         }else if (modalMode == 'transition'){
             setModalContent(<AddTransitionModal close={handleModalClose}/>)
+        }else if (modalMode == 'context'){
+            setModalContent(<ViewContextModal close={handleModalClose}/>)
         }
         setModalOpen(true)
     },[]);

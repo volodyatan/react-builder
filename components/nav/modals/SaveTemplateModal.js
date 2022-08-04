@@ -1,7 +1,13 @@
-import { Button, MenuItem, Box, Typography, TextField, IconButton } from '@mui/material';
+// react/nextjs
 import React, { useState, useEffect } from 'react'
 
+// material ui
+import { Button, MenuItem, Box, Typography, TextField, IconButton } from '@mui/material';
+
+// material icons
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+
+// context
 import { useElementsAddNodeContext, useElementsAddTransitionContext, useElementsContext } from '../../CONTEXT/ElementsProvider';
 
 const boxStyle = {
