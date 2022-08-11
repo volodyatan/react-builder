@@ -11,7 +11,7 @@ import { Box } from '@mui/system';
 import { useTemplateGetContextContext } from '../../../CONTEXT/TemplateProvider';
 
 // custom components
-import RenderAccordion from './RenderAccordion';
+import ContextBody from './ContextBody';
 
 const ViewMenu = ( ) => {
 
@@ -26,8 +26,8 @@ return (
   <Box sx={{
       width: 'auto'
     }}>
-      <Typography variant='button'>Menus</Typography>
-      <RenderAccordion type='menu' contextData={menuContext} />
+      <ContextBody type='menu' context={menuContext} />
+
   </Box>
 )
 }

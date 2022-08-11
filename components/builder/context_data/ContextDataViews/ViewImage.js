@@ -11,7 +11,7 @@ import { Box } from '@mui/system';
 import { useTemplateGetContextContext } from '../../../CONTEXT/TemplateProvider';
 
 // custom components
-import RenderAccordion from './RenderAccordion';
+import ContextBody from './ContextBody';
 
 // TODO: work on this component
 const ViewImage = ( ) => {
@@ -26,8 +26,8 @@ const ViewImage = ( ) => {
     <Box sx={{
         width: 'auto'
       }}>
-        <Typography variant='button'>Images</Typography>
-        <RenderAccordion type='image' contextData={imageContext} />
+        <ContextBody type='image' context={imageContext} />
+
     </Box>
   )
 }
