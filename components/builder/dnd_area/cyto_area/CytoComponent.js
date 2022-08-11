@@ -9,6 +9,7 @@ import { useCyContext, useCySetContext } from '../../../CONTEXT/ElementsProvider
 // custom components
 import AddNodeModal from '../modals/AddNodeModal';
 import AddTransitionModal from '../modals/AddTransitionModal';
+import ViewContextModal from '../modals/ViewContextModal';
 import OptionsDial from './OptionsDial';
 import CytoDrawer from './CytoDrawer';
 
@@ -112,6 +113,11 @@ const CytoComponent = (  ) => {
       setModalContent(<AddTransitionModal close={handleModalClose} source={source} />)
       setModalOpen(true)
     }
+
+    const handleOpenContext = (source) => {
+      setModalContent(<ViewContextModal close={handleModalClose} source={source} />)
+      setModalOpen(true)
+    }
   
     const handleModalClose = () => {
       setModalContent(<></>)
@@ -134,7 +140,7 @@ const CytoComponent = (  ) => {
           selector: 'node', // elements matching this Cytoscape.js selector will trigger cxtmenus
           commands: [ // an array of commands to list in the menu or a function that returns the array
             
-            { // example command
+            { 
               // fillColor: 'rgba(0, 32, 0, 0.75)', // optional: custom background color for item
               fillColor: 'rgba(188, 43, 43,0.75)',
               content: '<p>delete node</p>', // html/text content to be displayed in the menu
@@ -145,7 +151,7 @@ const CytoComponent = (  ) => {
               },
               enabled: true // whether the command is selectable
             },
-            { // example command
+            { 
               // fillColor: 'rgba(48, 91, 212, 0.75)', // optional: custom background color for item
               content: '<p>add transition</p>', // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want
@@ -155,7 +161,17 @@ const CytoComponent = (  ) => {
               },
               enabled: true // whether the command is selectable
             },
-            { // example command
+            { 
+              // fillColor: 'rgba(48, 91, 212, 0.75)', // optional: custom background color for item
+              content: '<p>view context</p>', // html/text content to be displayed in the menu
+              contentStyle: {}, // css key:value pairs to set the command's css in js if you want
+              select: (ele) => { // a function to execute when the command is selected, `ele` holds the reference to the active element
+                console.log('viewing context ',  ele.id() )
+                handleOpenContext(ele.id())
+              },
+              enabled: true // whether the command is selectable
+            },
+            { 
               // fillColor: 'rgba(0, 32, 0, 0.75)', // optional: custom background color for item
               content: `<h6>CLOSE</h6>`, // html/text content to be displayed in the menu
               contentStyle: {}, // css key:value pairs to set the command's css in js if you want

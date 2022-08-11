@@ -1,8 +1,14 @@
-import { Button, MenuItem, Box, Typography, TextField, IconButton } from '@mui/material';
+// react/nextjs
 import React, { useState, useEffect } from 'react'
 
+// material ui
+import { Button, MenuItem, Box, Typography, TextField, IconButton } from '@mui/material';
+
+// material icons
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { useElementsAddNodeContext, useElementsAddTransitionContext, useElementsContext } from '../../CONTEXT/ElementsProvider';
+
+// context
+import { useElementsAddNodeContext, useElementsAddTransitionContext, useCyContext } from '../../CONTEXT/ElementsProvider';
 
 const boxStyle = {
     borderRadius: '25px',
@@ -27,7 +33,7 @@ const SaveTemplateModal = ( {close, source = false} ) => {
 
     const [allNodes, setAllNodes] = useState([])
 
-    const elements = useElementsContext()
+    const elements = useCyContext()
     const addTransition = useElementsAddTransitionContext()
 
     useEffect(() => {
@@ -66,29 +72,7 @@ const SaveTemplateModal = ( {close, source = false} ) => {
             <Typography>
             Save template?
             </Typography>
-            {/* <div>
-                <TextField id='transitionName' label='Transition name' value={transitionName} required={true} onChange={(e) => setTransitionName(e.target.value)}/>
-                
-                <TextField select id='fromNode' label='From' value={nodeFrom} disabled={sourceDisabled} helperText='Select transition origin' required={true} onChange={(e) => setNodeFrom(e.target.value)}>
-                    {allNodes.map((options) => (
-                        <MenuItem key={options.id} value={options.id}>
-                            {options.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
-
-                <TextField select id='toNode' label='To' value={nodeTo} helperText='Select transition target' required={true} onChange={(e) => setNodeTo(e.target.value)}>
-                    {allNodes.map((options) => (
-                        <MenuItem key={options.id} value={options.id}>
-                            {options.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <Button type='submit'>
-                        Add Transition
-                </Button>
-
-            </div> */}
+            {/* TODO: add saving context to database */}
 
     </Box>
   )

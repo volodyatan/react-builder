@@ -1,67 +1,49 @@
 // react
-import React from 'react'
+import { useState } from 'react';
 
 // material ui
-import { Drawer, Toolbar, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, } from '@mui/material';
+import { Grid } from '@mui/material';
+import { Box } from '@mui/system';
+
+// custom componenets
+import ContextDataList from './ContextDataList';
 
 // TODO: work on this component
 const ContextDataView = () => {
-  return (
-    <div>
-        <Drawer
-            sx={{
-                width: 'auto',
-                height: '100%',
-                position: 'relative',
-                flexShrink: 0,
-                // color: 'grey',
-                '& .MuiDrawer-paper': {
-                    // width: 'auto',
-                    borderRadius: 1,
-                    backgroundColor: 'grey',
-                    minWidth: "250px",
-                    top: '10%',
-                    height: "90%",
-                    flexGrow: 1,
-                },
-            }}
-            variant="persistent"
-            anchor="left"
-            open={true}
-        >
-            {drawerList}
-        </Drawer>
-        <p>items</p>
+  const [activeView, setActiveView] = useState(<></>)
 
-    </div>
+  return (
+    <Grid 
+      direction='row' 
+      // alignItems='stretch'
+      justifyContent='flex-start'
+      container 
+      spacing={1}
+      sx={{
+        position: 'fixed',
+        width:'100%',
+        height: '100%',
+        left: 0,
+        right: 50,
+        top: 110,
+        bottom: 0
+      }}>
+      <Grid item xs={2}>
+
+        <ContextDataList setActive={setActiveView}/>
+
+      </Grid>
+      <Grid item xs={10}>
+        <Box sx={{}}>
+
+          {activeView}
+
+        </Box>
+
+      </Grid>
+
+    </Grid>
   )
 }
 
 export default ContextDataView
-
-
-const drawerList = (
-    <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
